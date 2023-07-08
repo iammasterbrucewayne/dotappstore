@@ -10,6 +10,7 @@ import {
 	Text,
 	VStack,
 	Button,
+	Link,
 } from "@chakra-ui/react";
 import { FiLogOut } from "react-icons/fi";
 import { BiSupport } from "react-icons/bi";
@@ -26,7 +27,14 @@ const Navbar = () => {
 				height={48}
 			/>
 			<HStack justifyContent="end">
-				<Button variant="outline" colorScheme="black">
+				<Button
+					as={Link}
+					variant="outline"
+					colorScheme="black"
+					href="https://github.com/iammasterbrucewayne/dotappstore#how-to-submit-a-project"
+					_hover={{ textDecoration: "none" }}
+					isExternal
+				>
 					Submit a project
 				</Button>
 			</HStack>
