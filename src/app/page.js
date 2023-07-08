@@ -1,9 +1,9 @@
 "use client";
 import Navbar from "@/components/common/navbar";
 import { Box, Heading } from "@chakra-ui/react";
-import RootLayout from "./layout";
 import ContextWrapper from "@/components/common/context-wrapper";
 import TabsComponent from "@/components/tabs";
+import Script from "next/script";
 
 export default function Page() {
 	return (
@@ -15,6 +15,11 @@ export default function Page() {
 				</Heading>
 				<TabsComponent />
 			</Box>
+			<Script
+				defer
+				data-domain="dotappstore.com"
+				src="https://plausible.io/js/script.js"
+			/>
 		</ContextWrapper>
 	);
 }
