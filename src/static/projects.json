@@ -106,7 +106,7 @@
 			"appname": "InvArch Tinkernet",
 			"appdescription": "The Economic Powerhouse & Permissionless Funding Hub of the InvArch Network.",
 			"url": "https://invarch.network/tinkernet",
-			"tags": []
+			"tags": ["Infrastructure"]
 		},
 		{
 			"logo": "https://pbs.twimg.com/profile_images/1612530823504207874/9eLTKT5h_400x400.jpg",
@@ -114,6 +114,34 @@
 			"appdescription": "We integrate the leading game engines with the Polkadot infrastructure.",
 			"url": "https://ajuna.io/",
 			"tags": ["Gaming", "Developer Tools"]
+		},
+		{
+			"logo": "https://pbs.twimg.com/profile_images/1608593518099841025/yYjVIio2_400x400.jpg",
+			"appname": "InvArch",
+			"appdescription": "A multichain network for launching decentralized communities, borderless businesses, & unstoppable organizations on Polkadot.",
+			"url": "https://invarch.network/",
+			"tags": ["Infrastructure"]
+		},
+		{
+			"logo": "https://pbs.twimg.com/profile_images/1675071852635381760/ua4dyGwn_400x400.jpg",
+			"appname": "KILT",
+			"appdescription": "KILT provides secure, practical identity solutions for enterprise and consumers. Part of the Polkadot ecosystem.",
+			"url": "https://www.kilt.io/",
+			"tags": ["Identity"]
+		},
+		{
+			"logo": "https://pbs.twimg.com/profile_images/1600550693735219209/DWxGBZb5_400x400.jpg",
+			"appname": "Hashed Network",
+			"appdescription": "We simplify web3 for businesses via native assets custody, reusable code, regulatory compliance & full-cycle development capabilities.",
+			"url": "https://hashed.network/",
+			"tags": ["B2B", "Developer Tools", "Legal"]
+		},
+		{
+			"logo": "https://pbs.twimg.com/profile_images/1477270136079982593/LpueCvD6_400x400.jpg",
+			"appname": "KodaDot",
+			"appdescription": "Multi Chain NFT marketplace, a one-stop shop for your NFTs.",
+			"url": "https://kodadot.xyz/",
+			"tags": ["NFT Marketplace"]
 		}
 	]
 }
