@@ -1,19 +1,8 @@
 import {
-	Avatar as ChakraAvatar,
-	Box,
 	HStack,
-	Menu,
-	MenuButton,
-	MenuDivider,
-	MenuItem,
-	MenuList,
-	Text,
-	VStack,
 	Button,
 	Link,
 } from "@chakra-ui/react";
-import { FiLogOut } from "react-icons/fi";
-import { BiSupport } from "react-icons/bi";
 import Image from "next/image";
 import _ from "lodash";
 
