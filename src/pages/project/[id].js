@@ -1,6 +1,11 @@
+import ContextWrapper from "@/components/common/context-wrapper";
+import Navbar from "@/components/common/navbar";
 import { useRouter } from "next/router";
 
 export default function Page() {
 	const router = useRouter();
-	return <p>Post: {router.query.id}</p>;
+	return <ContextWrapper>
+        <Navbar />
+        {router.query.id}
+    </ContextWrapper>;
 }
