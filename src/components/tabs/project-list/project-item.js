@@ -12,6 +12,7 @@ import {
 import _ from "lodash";
 
 export default function ProjectItem({
+	id,
 	logo,
 	appname,
 	appdescription,
@@ -21,7 +22,7 @@ export default function ProjectItem({
 	return (
 		<Grid
 			as={Link}
-			href={url}
+			href={`/project/${id}`}
 			p={8}
 			cursor="pointer"
 			_hover={{ bg: "whiteAlpha.200", textDecoration: "none" }}
@@ -33,7 +34,6 @@ export default function ProjectItem({
 				"repeat(10, 1fr)",
 			]}
 			gap={4}
-			isExternal
 		>
 			<GridItem colSpan={1}>
 				<Image
