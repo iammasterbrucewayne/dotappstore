@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const tabs = [
 	{ name: "All", category: "All" },
 	{ name: "Wallets", category: "Wallet" },
+	{ name: "NFTs", category: "NFT" },
 	{ name: "Explorers", category: "Explorer" },
 ];
 
