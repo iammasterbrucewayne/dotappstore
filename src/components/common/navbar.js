@@ -4,7 +4,7 @@ import _ from "lodash";
 
 const Navbar = () => {
 	return (
-		<HStack py={2} px={8} maxW="8xl" mx="auto" justifyContent="space-between">
+		<HStack py={2} px={8} maxW="6xl" mx="auto" justifyContent="space-between">
 			<Link href="/">
 				<Image
 					src="https://europe1.discourse-cdn.com/standard21/uploads/polkadot2/original/1X/6ea9950aed34af4aa14a3bbe5ce85549b54278a1.svg"
