@@ -1,3 +1,4 @@
+import ProjectLogo from "@/components/common/project-logo";
 import {
 	Grid,
 	GridItem,
@@ -36,16 +37,7 @@ export default function ProjectItem({
 			gap={4}
 		>
 			<GridItem colSpan={1}>
-				<Image
-					rounded="lg"
-					src={
-						logo
-							? logo
-							: "https://europe1.discourse-cdn.com/standard21/uploads/polkadot2/original/1X/6ea9950aed34af4aa14a3bbe5ce85549b54278a1.svg"
-					}
-					h="auto"
-					w="full"
-				/>
+				<ProjectLogo logo={logo} />
 			</GridItem>
 			<Stack as={GridItem} w="100%" colSpan={[2, 4, 4, 8]}>
 				<Grid templateRows="repeat(4, 1fr)" h="full">

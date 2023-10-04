@@ -1,5 +1,7 @@
 import {
 	Alert,
+	AlertDescription,
+	AlertDialogFooter,
 	AlertIcon,
 	Button,
 	Modal,
@@ -13,7 +15,7 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 
-const MoreInfo = ({ isOpen, onClose }) => (
+const MoreInfoModal = ({ isOpen, onClose }) => (
 	<Modal isOpen={isOpen} onClose={onClose}>
 		<ModalOverlay />
 		<ModalContent>
@@ -40,6 +42,21 @@ const MoreInfo = ({ isOpen, onClose }) => (
 	</Modal>
 );
 
+const MoreInfoButton = ({ onOpen }) => (
+	<Button
+		onClick={onOpen}
+		bg="transparent"
+		color="pink.600"
+		mb={1}
+		p={0}
+		h="fit-content"
+		textDecor="underline"
+		_hover={{ bg: "transparent" }}
+	>
+		Learn More
+	</Button>
+);
+
 export const Disclaimer = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	return (
@@ -51,18 +68,13 @@ export const Disclaimer = () => {
 			color="pink.600"
 		>
 			<AlertIcon />
-			This information is provided by a third party and is not verified by us.
-			<Button
-				onClick={onOpen}
-				bg="transparent"
-				color="pink.600"
-				px={1}
-				textDecor="underline"
-				_hover={{ bg: "transparent" }}
-			>
-				Learn More
-			</Button>
-			<MoreInfo isOpen={isOpen} onClose={onClose} />
+			<AlertDescription>
+				This information is provided by a third party and is not verified by us.{" "}
+				<span>
+					<MoreInfoButton onOpen={onOpen} />
+					<MoreInfoModal isOpen={isOpen} onClose={onClose} />
+				</span>
+			</AlertDescription>
 		</Alert>
 	);
 };
