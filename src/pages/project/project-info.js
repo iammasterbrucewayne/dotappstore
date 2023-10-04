@@ -1,19 +1,17 @@
-import ContextWrapper from "@/components/common/context-wrapper";
-import Navbar from "@/components/common/navbar";
-import { Disclaimer } from "./disclaimer";
 import {
 	Button,
-	ButtonGroup,
 	Grid,
 	GridItem,
+	HStack,
 	Heading,
-	Image,
 	Link,
+	Tag,
 	Text,
 	VStack,
 } from "@chakra-ui/react";
 import ProjectLogo from "@/components/common/project-logo";
-import { IoCaretDown, IoCaretUp, IoChevronUp } from "react-icons/io5";
+import { IoCaretUp } from "react-icons/io5";
+import { map } from "lodash";
 
 export default ({ id, logo, appname, appdescription, url, tags, featured }) => {
 	return (
@@ -36,6 +34,11 @@ export default ({ id, logo, appname, appdescription, url, tags, featured }) => {
 				<Text textAlign={["center", "left"]} pb={8}>
 					{appdescription}
 				</Text>
+				<HStack>
+					{map(tags, (tag) => (
+						<Tag>{tag}</Tag>
+					))}
+				</HStack>
 			</GridItem>
 			<GridItem align="center" colSpan={[1, 1, 1, 2]}>
 				<VStack>
