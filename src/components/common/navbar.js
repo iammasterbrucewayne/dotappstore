@@ -20,7 +20,9 @@ const Navbar = () => {
 					variant="outline"
 					colorScheme="black"
 					href="https://github.com/iammasterbrucewayne/dotappstore#how-to-submit-a-project"
-					_hover={{ textDecoration: "none" }}
+					boxShadow="4px 4px 0 black"
+					transform="scale(1)"
+					_hover={{ textDecoration: "none", transform: "scale(1.03)" }}
 					isExternal
 				>
 					Submit a project

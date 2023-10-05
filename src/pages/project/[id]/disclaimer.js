@@ -63,7 +63,7 @@ export const Disclaimer = () => {
 		<Alert
 			status="info"
 			variant="left-accent"
-			mb={4}
+			mb={8}
 			colorScheme="pink"
 			color="pink.600"
 		>

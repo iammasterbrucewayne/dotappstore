@@ -1,7 +1,7 @@
 import ContextWrapper from "@/components/common/context-wrapper";
 import Navbar from "@/components/common/navbar";
 import { useRouter } from "next/router";
-import { Disclaimer } from "./disclaimer";
+import { Disclaimer } from "./[id]/disclaimer";
 import { useProjects } from "@/lib/store/useProjects";
 import { find, isArray, isEmpty } from "lodash";
 import { useEffect, useState } from "react";

@@ -1,0 +1,16 @@
+/* .slick-slide {
+  margin: 0 10px;
+}
+.slick-list {
+  margin: 0 -10px;
+} */
+
+/* Style all thumbnails */
+.nav-slider .slick-slide > div > div > img {
+	border: 2px solid transparent !important;
+}
+
+/* Style the active thumbnail */
+.nav-slider .slick-current > div > div > img {
+	border: 2px solid black !important;
+}
