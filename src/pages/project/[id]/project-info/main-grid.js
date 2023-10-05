@@ -1,9 +1,4 @@
-import {
-	Grid,
-	GridItem,
-	Image as ChakraImage,
-	useBreakpointValue,
-} from "@chakra-ui/react";
+import { Grid, GridItem, useBreakpointValue } from "@chakra-ui/react";
 import ProjectLogo from "@/components/common/project-logo";
 import CTA from "./cta";
 import MainContent from "./main-content";
@@ -20,7 +15,10 @@ const MainGrid = ({
 	tags,
 	featured,
 }) => {
-	const isHidden = useBreakpointValue({ base: true, sm: false });
+	const isHidden = useBreakpointValue(
+		{ base: true, sm: false },
+		{ fallback: false }
+	);
 
 	return (
 		<Grid
