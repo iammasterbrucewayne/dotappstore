@@ -4,6 +4,7 @@ import CTA from "./cta";
 import MainContent from "./main-content";
 import TagList from "./tag-list";
 import ImageCarousel from "./image-carousel";
+import { useEffect, useState } from "react";
 
 const MainGrid = ({
 	id,
@@ -15,10 +16,12 @@ const MainGrid = ({
 	tags,
 	featured,
 }) => {
-	const isHidden = useBreakpointValue(
-		{ base: true, sm: false },
-		{ fallback: false }
-	);
+	const [isHidden, setIsHidden] = useState(true);
+
+	useEffect(() => {
+		const isClientSmallScreen = window.innerWidth < 480;
+		setIsHidden(isClientSmallScreen);
+	}, []);
 
 	return (
 		<Grid
