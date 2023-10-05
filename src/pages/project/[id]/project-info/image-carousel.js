@@ -59,6 +59,7 @@ const ImageCarousel = ({
 			height="fit-content"
 			position="relative"
 			my={8}
+			pr={{ md: 8, lg: 24 }}
 			overflow="hidden"
 			mx="auto"
 			{...props}
