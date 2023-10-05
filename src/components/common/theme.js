@@ -1,7 +1,6 @@
 import { extendTheme } from "@chakra-ui/react";
 import localFont from "next/font/local";
 
-// Import the weights and subsets, add any other config here as well
 export const unbounded = localFont({
 	src: [
 		{

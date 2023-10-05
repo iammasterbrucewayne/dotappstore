@@ -77,7 +77,6 @@ const ImageCarousel = ({ imageUrls = [], ...props }) => {
 							{imagesToDisplay.map((url, index) => (
 								<Box p={1} key={index}>
 									{" "}
-									{/* Added padding here */}
 									<ChakraImage
 										src={url}
 										width="100%"

@@ -60,10 +60,10 @@ export default function TabsComponent() {
 				const response = await fetch("/api/get-projects");
 				const projects = await response.json();
 				setProjects(projects);
-				setIsLoading(false); // Set loading to false once projects are loaded
+				setIsLoading(false);
 			} catch (error) {
 				console.error("Failed to fetch projects:", error);
-				// Handle error appropriately, e.g., show an error message to the user
+				// TODO: Handle error appropriately, e.g., show an error message to the user
 			}
 		};
 		// Fetch projects only if projects array is empty

@@ -23,7 +23,7 @@ export default function Page() {
 				setProjects(projectsFromApi);
 			} catch (error) {
 				console.error("Failed to fetch projects:", error);
-				// Handle error appropriately
+				// TODO: Handle error appropriately
 			}
 		};
 
