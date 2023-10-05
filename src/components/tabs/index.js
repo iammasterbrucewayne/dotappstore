@@ -16,6 +16,7 @@ import ProjectList from "./project-list";
 const tabs = [
 	{ name: "All", category: "All" },
 	{ name: "Wallets", category: "Wallet" },
+	{ name: "NFTs", category: "NFT" },
 	{ name: "Explorers", category: "Explorer" },
 ];
 
