@@ -1,13 +1,19 @@
 import React, { Fragment, useRef } from "react";
 import Slider from "react-slick";
 import { Box, Image as ChakraImage } from "@chakra-ui/react";
-import Image from "next/image";
-import placeholder from "@/assets/placeholder.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./image-carousel.css";
+import { size } from "lodash";
 
-const ImageCarousel = ({ imageUrls = [], ...props }) => {
+const ImageCarousel = ({
+	imageUrls = [
+		"https://i.imgur.com/fdAa2rf.png",
+		"https://i.imgur.com/WIZn6gk.png",
+		"https://i.imgur.com/XNoZidz.png",
+	],
+	...props
+}) => {
 	const mainSlider = useRef();
 	const navSlider = useRef();
 
@@ -20,7 +26,7 @@ const ImageCarousel = ({ imageUrls = [], ...props }) => {
 	};
 
 	const settingsThumbs = {
-		slidesToShow: 4,
+		slidesToShow: size(imageUrls),
 		slidesToScroll: 1,
 		asNavFor: mainSlider.current,
 		dots: false,
@@ -44,7 +50,7 @@ const ImageCarousel = ({ imageUrls = [], ...props }) => {
 		],
 	};
 
-	const imagesToDisplay = imageUrls.slice(0, 4);
+	const imagesToDisplay = imageUrls.slice(0, 6);
 
 	return (
 		<Box
@@ -57,50 +63,36 @@ const ImageCarousel = ({ imageUrls = [], ...props }) => {
 			mx="auto"
 			{...props}
 		>
-			{imagesToDisplay.length > 0 ? (
-				<Fragment>
-					<Slider {...settingsMain} ref={mainSlider} className="main-slider">
-						{imagesToDisplay.map((url, index) => (
+			<Slider {...settingsMain} ref={mainSlider} className="main-slider">
+				{imagesToDisplay.map((url, index) => (
+					<ChakraImage
+						key={index}
+						src={url}
+						width="100%"
+						height="100%"
+						objectFit="cover"
+						alt={`carousel-image-${index}`}
+						rounded="2xl"
+					/>
+				))}
+			</Slider>
+			<Box mt={4}>
+				<Slider {...settingsThumbs} ref={navSlider} className="nav-slider">
+					{imagesToDisplay.map((url, index) => (
+						<Box p={1} key={index}>
+							{" "}
 							<ChakraImage
-								key={index}
 								src={url}
 								width="100%"
 								height="100%"
 								objectFit="cover"
-								alt={`carousel-image-${index}`}
+								alt={`thumbnail-${index}`}
 								rounded="2xl"
 							/>
-						))}
-					</Slider>
-					<Box mt={4}>
-						<Slider {...settingsThumbs} ref={navSlider} className="nav-slider">
-							{imagesToDisplay.map((url, index) => (
-								<Box p={1} key={index}>
-									{" "}
-									<ChakraImage
-										src={url}
-										width="100%"
-										height="100%"
-										objectFit="cover"
-										alt={`thumbnail-${index}`}
-										rounded="2xl"
-									/>
-								</Box>
-							))}
-						</Slider>
-					</Box>
-				</Fragment>
-			) : (
-				<ChakraImage
-					as={Image}
-					src={placeholder}
-					width="100%"
-					height="100%"
-					objectFit="cover"
-					alt="placeholder"
-					rounded="2xl"
-				/>
-			)}
+						</Box>
+					))}
+				</Slider>
+			</Box>
 		</Box>
 	);
 };
