@@ -57,7 +57,7 @@ const MoreInfoButton = ({ onOpen }) => (
 	</Button>
 );
 
-export const Disclaimer = () => {
+const Disclaimer = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	return (
 		<Alert
@@ -78,3 +78,5 @@ export const Disclaimer = () => {
 		</Alert>
 	);
 };
+
+export default Disclaimer;
