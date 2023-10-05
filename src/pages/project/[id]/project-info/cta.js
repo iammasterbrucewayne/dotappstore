@@ -26,7 +26,6 @@ const CTA = ({ url }) => (
 			}
 			transform="scale(1)"
 			_hover={{ transform: "scale(1.03)" }}
-			isExternal
 			isDisabled
 		>
 			Upvote
