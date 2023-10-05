@@ -35,8 +35,8 @@ export default ({ id, logo, appname, appdescription, url, tags, featured }) => {
 					{appdescription}
 				</Text>
 				<HStack>
-					{map(tags, (tag) => (
-						<Tag>{tag}</Tag>
+					{map(tags, (tag, key) => (
+						<Tag key={key}>{tag}</Tag>
 					))}
 				</HStack>
 			</GridItem>
