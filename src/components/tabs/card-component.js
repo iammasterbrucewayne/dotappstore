@@ -39,6 +39,7 @@ export default function CardComponent({
 						height="auto"
 						w="100%"
 						bgClip="border-box"
+						alt="banner"
 					/>
 				</GridItem>
 				<CardBody as={GridItem} rowSpan={2} pt={4}>

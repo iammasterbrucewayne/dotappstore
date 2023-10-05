@@ -1,4 +1,3 @@
-import yieldbay from "@/static/projects/yieldbay";
 import talisman from "@/static/projects/talisman";
 import subscan from "@/static/projects/subscan";
 import subwallet from "@/static/projects/subwallet";
@@ -29,9 +28,11 @@ import polkascan from "@/static/projects/polkascan";
 import statescan from "@/static/projects/statescan";
 import polkaholic from "@/static/projects/polkaholic";
 import blockchair from "@/static/projects/blockchair";
+import yieldbay from "@/static/projects/yieldbay";
+import townhall from "@/static/projects/townhall";
+import polkatax from "@/static/projects/polkatax";
 
-export default [
-	yieldbay,
+const localProjectData = [
 	talisman,
 	subscan,
 	subwallet,
@@ -62,4 +63,9 @@ export default [
 	statescan,
 	polkaholic,
 	blockchair,
+	yieldbay,
+	townhall,
+	polkatax,
 ];
+
+export default localProjectData;
