@@ -18,13 +18,16 @@ const CTA = ({ url }) => (
 			colorScheme="pink"
 			w="full"
 			py={8}
-			as={Link}
-			href={url}
 			leftIcon={<IoCaretUp color="white" />}
-			rightIcon={<Text>9</Text>}
+			rightIcon={
+				<Text fontSize="xs" fontWeight="normal">
+					{"(soon)"}
+				</Text>
+			}
 			transform="scale(1)"
-			_hover={{ textDecoration: "none", transform: "scale(1.03)" }}
+			_hover={{ transform: "scale(1.03)" }}
 			isExternal
+			isDisabled
 		>
 			Upvote
 		</Button>
@@ -58,8 +61,12 @@ const CTA = ({ url }) => (
 				p={0}
 				leftIcon={<Icon as={IoShieldCheckmarkOutline} />}
 				_hover={{ textDecoration: "none", color: "pink.400" }}
+				isDisabled
 			>
 				Claim Project
+				<Text pl={1} as="span" fontSize="xs">
+					{"(soon)"}
+				</Text>
 			</Button>
 			<Button
 				as={Link}
