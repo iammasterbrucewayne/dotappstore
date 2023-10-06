@@ -62,6 +62,7 @@ export default function TabsComponent() {
 				const projects = await response.json();
 				setProjects(projects);
 				setIsLoading(false);
+				console.log(projects);
 			} catch (error) {
 				console.error("Failed to fetch projects:", error);
 				// TODO: Handle error appropriately, e.g., show an error message to the user
