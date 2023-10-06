@@ -14,16 +14,20 @@ export default function Page() {
 
 	const { projects, setProjects } = useProjects();
 	const [projectInfo, setProjectInfo] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchProjects = async () => {
 			try {
+				setIsLoading(true);
 				const response = await fetch("/api/get-projects");
 				const projectsFromApi = await response.json();
 				setProjects(projectsFromApi);
 			} catch (error) {
 				console.error("Failed to fetch projects:", error);
 				// TODO: Handle error appropriately
+			} finally {
+				setIsLoading(false);
 			}
 		};
 
@@ -40,7 +44,7 @@ export default function Page() {
 			<Navbar />
 			<VStack p={8} mx="auto" maxW="6xl">
 				<Disclaimer />
-				{projectInfo && <ProjectInfo {...projectInfo} />}
+				projectInfo && <ProjectInfo {...projectInfo} isLoaded={!isLoading} />
 			</VStack>
 		</ContextWrapper>
 	);

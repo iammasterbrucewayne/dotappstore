@@ -4,7 +4,14 @@ import CTA from "./cta";
 import MainContent from "./main-content";
 import TagList from "./tag-list";
 import ImageCarousel from "./image-carousel";
-import { useEffect, useState } from "react";
+import {
+	ButtonGroupSkeleton,
+	HeadingSkeleton,
+	ImageCarouselSkeleton,
+	LogoSkeleton,
+	TagsSkeleton,
+	TextSkeleton,
+} from "./skeletons";
 
 const MainGrid = ({
 	id,
@@ -15,13 +22,10 @@ const MainGrid = ({
 	url,
 	tags,
 	featured,
+	isLoaded,
 }) => {
-	const [isHidden, setIsHidden] = useState(true);
-
-	useEffect(() => {
-		const isClientSmallScreen = window.innerWidth < 480;
-		setIsHidden(isClientSmallScreen);
-	}, []);
+	// using useBreakpointValue from Chakra UI for handling visibility
+	const isHidden = useBreakpointValue({ base: true, sm: false });
 
 	return (
 		<Grid
@@ -34,19 +38,32 @@ const MainGrid = ({
 			gap={4}
 		>
 			<GridItem align="center">
-				<ProjectLogo logo={logo} />
+				{isLoaded ? <ProjectLogo logo={logo} /> : <LogoSkeleton />}
 			</GridItem>
+
 			<GridItem colSpan={[1, 3, 3, 7]} alignContent={["center", "start"]}>
-				<MainContent
-					appname={appname}
-					appdescription={appdescription}
-					textAlign={["center", "left"]}
-				/>
-				<TagList tags={tags} justifyContent={["center", "start"]} mb={8} />
-				<ImageCarousel imageUrls={imageUrls} hidden={isHidden} />
+				{isLoaded ? (
+					<>
+						<MainContent
+							appname={appname}
+							appdescription={appdescription}
+							textAlign={["center", "left"]}
+						/>
+						<TagList tags={tags} justifyContent={["center", "start"]} mb={8} />
+						<ImageCarousel imageUrls={imageUrls} hidden={isHidden} />
+					</>
+				) : (
+					<>
+						<HeadingSkeleton />
+						<TextSkeleton />
+						<TagsSkeleton />
+						<ImageCarouselSkeleton hidden={isHidden} />
+					</>
+				)}
 			</GridItem>
+
 			<GridItem align="center" colSpan={[1, 1, 1, 2]}>
-				<CTA url={url} />
+				{isLoaded ? <CTA url={url} /> : <ButtonGroupSkeleton />}
 			</GridItem>
 		</Grid>
 	);
