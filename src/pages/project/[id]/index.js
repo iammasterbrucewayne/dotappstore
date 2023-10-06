@@ -5,7 +5,7 @@ import Disclaimer from "./disclaimer";
 import { useProjects } from "@/lib/store/useProjects";
 import { find, isEmpty } from "lodash";
 import { useEffect, useState } from "react";
-import { VStack } from "@chakra-ui/react";
+import { VStack, Spinner, Box } from "@chakra-ui/react";
 import ProjectInfo from "./project-info";
 
 export default function Page() {
@@ -14,16 +14,20 @@ export default function Page() {
 
 	const { projects, setProjects } = useProjects();
 	const [projectInfo, setProjectInfo] = useState(null);
+	const [isLoaded, setIsLoaded] = useState(false);
 
 	useEffect(() => {
 		const fetchProjects = async () => {
 			try {
+				setIsLoaded(false);
 				const response = await fetch("/api/get-projects");
 				const projectsFromApi = await response.json();
 				setProjects(projectsFromApi);
 			} catch (error) {
 				console.error("Failed to fetch projects:", error);
 				// TODO: Handle error appropriately
+			} finally {
+				setIsLoaded(true);
 			}
 		};
 
@@ -40,7 +44,7 @@ export default function Page() {
 			<Navbar />
 			<VStack p={8} mx="auto" maxW="6xl">
 				<Disclaimer />
-				{projectInfo && <ProjectInfo {...projectInfo} />}
+				projectInfo && <ProjectInfo {...projectInfo} isLoaded={isLoaded} />
 			</VStack>
 		</ContextWrapper>
 	);
