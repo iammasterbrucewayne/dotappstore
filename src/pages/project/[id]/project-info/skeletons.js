@@ -78,7 +78,3 @@ export const ButtonGroupSkeleton = (props) =>
 			{...props}
 		/>
 	));
-
-const defaultSkeleton = (props) => <Skeleton {...props} />;
-
-export default defaultSkeleton;
