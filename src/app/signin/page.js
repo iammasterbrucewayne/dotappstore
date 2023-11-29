@@ -4,7 +4,7 @@ import TwitterSignInButton from "../../components/common/TwitterSignInButton";
 import EmailSignInForm from "../../components/common/EmailSignInForm";
 import ContextWrapper from "@/components/common/context-wrapper";
 
-import WalletConnect from "./wallet-connect";
+// import WalletConnect from "./wallet-connect";
 
 const SignInPage = () => {
   return (
