@@ -23,6 +23,7 @@ const MainGrid = ({
 	tags,
 	featured,
 	isLoaded,
+	upvotes
 }) => {
 	const [isHidden, setIsHidden] = useState(true);
 
@@ -114,7 +115,7 @@ const MainGrid = ({
 			</GridItem>
 			<GridItem align="center" colSpan={[1, 1, 1, 2]}>
 				{isLoaded ? (
-					<CTA url={url} />
+					<CTA url={url} id={id} upvotes={upvotes}/>
 				) : (
 					times(2, (index) => (
 						<Skeleton
