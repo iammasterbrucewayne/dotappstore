@@ -6,7 +6,7 @@ import { useProjects } from "@/lib/store/useProjects";
 import { find, isEmpty } from "lodash";
 import { useEffect, useState } from "react";
 import { VStack, Spinner, Box } from "@chakra-ui/react";
-import ProjectInfo from "./project-info";
+import ProjectInfo from "../../../components/project-info";
 import AuthProvider from "@/components/common/auth-provider";
 
 export default function Page() {
