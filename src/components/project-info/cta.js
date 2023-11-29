@@ -141,6 +141,8 @@ const CTA = ({ url, id, upvotes }) => {
             ) : (
               <IoCheckmarkSharp color="white" />
             )
+          ) : isHovering ? (
+            <IoCaretUp color="#B83280" />
           ) : (
             <IoCaretUp color="white" />
           )
@@ -151,7 +153,7 @@ const CTA = ({ url, id, upvotes }) => {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         isDisabled={hasUpvoted == null || isLoading}
-        _hover={{ transform: "scale(1.03)", variant: "outline" }}
+        _hover={{ transform: "scale(1.03)" }}
         onClick={async () => {
           if (hasUpvoted) {
             setIsLoading(true);
