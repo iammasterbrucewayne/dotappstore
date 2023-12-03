@@ -10,7 +10,7 @@ export default function ProjectList({ category, projects }) {
   return (
     <TabPanel>
       <Text fontSize="sm" color="gray.600" mb={6}>
-        {_.size(filteredProjects)} projects filtered by "{category}"
+        {_.size(filteredProjects)} projects filtered by &quot;{category}&quot;
       </Text>
       <Stack
         border="1px"
