@@ -1,8 +1,17 @@
-import { Tab, TabList, TabPanels, Tabs } from "@chakra-ui/react";
-import _ from "lodash";
+import {
+	HStack,
+	Skeleton,
+	Tab,
+	TabList,
+	TabPanels,
+	Tabs,
+	VStack,
+} from "@chakra-ui/react";
+import { map, isEmpty, times } from "lodash";
+import { useEffect, useState } from "react";
+import { useProjects } from "@/lib/store/useProjects";
 import { FeaturedPanel, FeaturedTab } from "./featured";
 import ProjectList from "./project-list";
-import { useEffect, useState } from "react";
 
 const tabs = [
 	{ name: "All", category: "All" },
@@ -11,29 +20,74 @@ const tabs = [
 	{ name: "Explorers", category: "Explorer" },
 ];
 
+const LoadingSkeleton = () => (
+	<VStack alignItems="start">
+		<HStack>
+			{times(4, (index) => (
+				<Skeleton
+					key={index}
+					startColor="pink.100"
+					endColor="pink.300"
+					mt={8}
+					h={8}
+					w={16}
+					rounded="full"
+				/>
+			))}
+		</HStack>
+		<HStack maxW="6xl" mt={8} spacing={8} wrap="wrap">
+			{times(4, (index) => (
+				<Skeleton
+					key={index}
+					startColor="pink.100"
+					endColor="pink.300"
+					h={[36, 48]}
+					w={[250, 300, 320, 450]}
+					rounded="3xl"
+				/>
+			))}
+		</HStack>
+	</VStack>
+);
+
 export default function TabsComponent() {
-	const [projects, setProjects] = useState([]);
+	const { projects, setProjects } = useProjects();
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
+		// Function to fetch projects from the API
 		const getProjects = async () => {
-			const response = await fetch("/api/get-projects");
-			const projects = await response.json();
-			setProjects(projects);
+			try {
+				const response = await fetch("/api/get-projects");
+				const projects = await response.json();
+				setProjects(projects);
+				setIsLoading(false);
+			} catch (error) {
+				console.error("Failed to fetch projects:", error);
+				// TODO: Handle error appropriately, e.g., show an error message to the user
+			}
 		};
-		getProjects();
-	}, []);
+		// Fetch projects only if projects array is empty
+		if (isEmpty(projects)) {
+			getProjects();
+		} else {
+			setIsLoading(false); // If projects are already present, set loading to false
+		}
+	}, [projects, setProjects]);
 
-	return (
+	return isLoading ? (
+		<LoadingSkeleton />
+	) : (
 		<Tabs variant="soft-rounded" colorScheme="pink" mt={8}>
 			<TabList overflow="scroll" p={1}>
 				<FeaturedTab />
-				{_?.map(tabs, (tab, index) => (
+				{map(tabs, (tab, index) => (
 					<Tab key={index}>{tab.name}</Tab>
 				))}
 			</TabList>
 			<TabPanels pt={6}>
 				<FeaturedPanel projects={projects} />
-				{_?.map(tabs, (tab, index) => (
+				{map(tabs, (tab, index) => (
 					<ProjectList key={index} projects={projects} {...tab} />
 				))}
 			</TabPanels>

@@ -16,9 +16,13 @@
     "eslint-config-next": "13.4.9",
     "framer-motion": "^10.12.18",
     "lodash": "^4.17.21",
+    "mongodb": "^6.1.0",
     "next": "13.4.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "^4.10.1"
+    "react-icons": "^4.10.1",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
+    "zustand": "^4.4.2"
   }
 }

@@ -10,10 +10,10 @@ import {
 } from "@chakra-ui/react";
 
 export default function CardComponent({
+	id,
 	appname,
 	appdescription,
 	featured,
-	url,
 }) {
 	const imgUrl = featured?.coverImage;
 	return (
@@ -25,8 +25,7 @@ export default function CardComponent({
 			overflow="hidden"
 			transition="all 0.2s ease-in-out"
 			transform="scale(1)"
-			href={url ? url : "#"}
-			isExternal
+			href={`/project/${id}`}
 			_hover={{ transform: "scale(1.03)", textDecoration: "none" }}
 		>
 			<Grid templateRows="repeat(5, 1fr)">
@@ -40,6 +39,7 @@ export default function CardComponent({
 						height="auto"
 						w="100%"
 						bgClip="border-box"
+						alt="banner"
 					/>
 				</GridItem>
 				<CardBody as={GridItem} rowSpan={2} pt={4}>

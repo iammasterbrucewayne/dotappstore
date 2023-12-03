@@ -1,3 +1,4 @@
+import ProjectLogo from "@/components/common/project-logo";
 import {
 	Grid,
 	GridItem,
@@ -12,6 +13,7 @@ import {
 import _ from "lodash";
 
 export default function ProjectItem({
+	id,
 	logo,
 	appname,
 	appdescription,
@@ -21,7 +23,7 @@ export default function ProjectItem({
 	return (
 		<Grid
 			as={Link}
-			href={url}
+			href={`/project/${id}`}
 			p={8}
 			cursor="pointer"
 			_hover={{ bg: "whiteAlpha.200", textDecoration: "none" }}
@@ -33,19 +35,9 @@ export default function ProjectItem({
 				"repeat(10, 1fr)",
 			]}
 			gap={4}
-			isExternal
 		>
 			<GridItem colSpan={1}>
-				<Image
-					rounded="lg"
-					src={
-						logo
-							? logo
-							: "https://europe1.discourse-cdn.com/standard21/uploads/polkadot2/original/1X/6ea9950aed34af4aa14a3bbe5ce85549b54278a1.svg"
-					}
-					h="auto"
-					w="full"
-				/>
+				<ProjectLogo logo={logo} />
 			</GridItem>
 			<Stack as={GridItem} w="100%" colSpan={[2, 4, 4, 8]}>
 				<Grid templateRows="repeat(4, 1fr)" h="full">
