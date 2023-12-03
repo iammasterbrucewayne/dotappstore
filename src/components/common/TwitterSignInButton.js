@@ -10,11 +10,11 @@ const TwitterSignInButton = () => {
   return (
     <Button
       colorScheme="twitter"
+      size="lg"
       width={"full"}
-      gap={"10px"}
+      leftIcon={<RiTwitterXFill />}
       onClick={() => signIn("twitter", { callbackUrl })}
     >
-      <RiTwitterXFill />
       Sign in with Twitter
     </Button>
   );

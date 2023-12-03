@@ -1,52 +1,37 @@
 "use client";
-import { Flex, Heading, Image, Text, Input, Button } from "@chakra-ui/react";
+import { Heading, Text, Button, VStack } from "@chakra-ui/react";
 import TwitterSignInButton from "../../components/common/TwitterSignInButton";
 import EmailSignInForm from "../../components/common/EmailSignInForm";
 import ContextWrapper from "@/components/common/context-wrapper";
+import Navbar from "@/components/common/navbar";
 
 // import WalletConnect from "./wallet-connect";
 
 const SignInPage = () => {
   return (
     <ContextWrapper>
-      <Flex
-        maxW={"6xl"}
+      <Navbar />
+      <VStack
+        maxW={"lg"}
         mx={"auto"}
-        justify={"center"}
-        align={"center"}
-        flexDir={"column"}
-        height={"100vh"}
-        gap={"40px"}
+        mt={16}
       >
-        <Flex justify={"center"} gap={"10px"} align={"center"}>
-          <Image
-            src="https://europe1.discourse-cdn.com/standard21/uploads/polkadot2/original/1X/6ea9950aed34af4aa14a3bbe5ce85549b54278a1.svg"
-            alt="dot-logo"
-            width={"50px"}
-            height={"50px"}
-          />
-          <Heading>DotAppStore</Heading>
-        </Flex>
-        <Flex
-          justify={"center"}
-          align={"center"}
-          flexDir={"column"}
-          gap={"10px"}
+        <VStack
         >
-          <Heading>Sign In</Heading>
-          <Text textAlign={"center"}>
+          <Heading fontWeight="black">Sign In</Heading>
+          <Text textAlign={"center"} fontSize="lg" mb={4}>
             Join a community dedicated to discovering and sharing Polkadot
             ecosystem projects
           </Text>
-          <EmailSignInForm />
-          <Text>OR</Text>
           <TwitterSignInButton />
-          <Button colorScheme="green" marginTop={"10px"} width={"full"}>
+          <Button colorScheme="pink" size="lg" mt={2} width={"full"}>
             Sign in with Web3 wallet
           </Button>
           {/* <WalletConnect /> */}
-        </Flex>
-      </Flex>
+          <Text fontWeight="semibold" my={4}>OR</Text>
+          <EmailSignInForm />
+        </VStack>
+      </VStack>
     </ContextWrapper>
   );
 };
