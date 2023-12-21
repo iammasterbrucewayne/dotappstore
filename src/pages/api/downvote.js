@@ -15,9 +15,9 @@ export default async function handler(req, res) {
 
     const result = await projectsCollection.updateOne(
       { id: projectID },
-      { 
+      {
         $inc: { upvotes: -1 },
-        $pull: { upvoteUsers: userID }
+        $pull: { upvoteUsers: userID },
       }
     );
 

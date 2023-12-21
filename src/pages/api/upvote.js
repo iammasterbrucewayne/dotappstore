@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const { projectID, userID } = req.body;
     const result = await projectsCollection.updateOne(
       { id: projectID },
-      { $inc: { upvotes: 1 }, $addToSet: { upvoteUsers: userID }}
+      { $inc: { upvotes: 1 }, $addToSet: { upvoteUsers: userID } }
     );
 
     if (result.modifiedCount === 0) {

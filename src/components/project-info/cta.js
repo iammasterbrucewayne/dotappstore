@@ -5,6 +5,16 @@ import {
   Text,
   Icon,
   ButtonGroup,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Flex,
+  Tag,
 } from "@chakra-ui/react";
 import {
   IoCaretUp,
@@ -16,35 +26,6 @@ import {
 import { useProjects } from "@/lib/store/useProjects";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-
-const fetchUserVotes = async (projectID, userID, setHasUpvoted) => {
-  try {
-    const response = await fetch("/api/get-votes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ projectID, userID }),
-    });
-
-    const data = await response.json();
-    console.log(data);
-
-    if (response.ok) {
-      setHasUpvoted(data.hasUpvoted);
-    } else {
-      console.error(data.message);
-      if (response.status === 404) {
-        alert("An error occurred while upvoting. Please try again.");
-      } else {
-        alert("An error occurred while upvoting. Please try again.");
-      }
-    }
-  } catch (error) {
-    console.error("Error while upvoting:", error);
-    alert("An unexpected error occurred. Please try again.");
-  }
-};
 
 const upvote = async ({ projectID, userID }) => {
   try {
@@ -74,6 +55,36 @@ const upvote = async ({ projectID, userID }) => {
   }
 };
 
+const report = async ({ projectID, userID, reportType }) => {
+  try {
+    const response = await fetch("/api/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ projectID, userID, reportType }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log(data.message);
+    } else {
+      console.error(data.message);
+      if (response.status === 404) {
+        alert("An error occurred while Reporting. Please try again.");
+      } else if (response.status == 409) {
+        alert(data.message);
+      } else {
+        alert("An error occurred while Reporting. Please try again.");
+      }
+    }
+  } catch (error) {
+    console.error("Error while Reporting:", error);
+    alert("An unexpected error occurred. Please try again.");
+  }
+};
+
 const downvote = async ({ projectID, userID }) => {
   try {
     const response = await fetch("/api/downvote", {
@@ -87,6 +98,8 @@ const downvote = async ({ projectID, userID }) => {
     const data = await response.json();
 
     if (response.ok) {
+      console.log(data.message);
+    } else if (response.status == 409) {
       console.log(data.message);
     } else {
       console.error(data.message);
@@ -102,21 +115,51 @@ const downvote = async ({ projectID, userID }) => {
   }
 };
 
-const CTA = ({ url, id, upvotes }) => {
+const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
   const { data: session } = useSession();
   const { projects, setProjects } = useProjects();
-  const [hasUpvoted, setHasUpvoted] = useState(null);
+  const [hasUpvoted, setHasUpvoted] = useState(false);
+  const [hasReported, setHasReported] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isUpvoteLoading, setIsUpvoteLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [reportedType, setReportedType] = useState(null);
+  const reportTypes = [
+    "Scam",
+    "Harassment",
+    "Threatening Violence",
+    "Hate",
+    "Impersonation",
+    "Copyright Violation",
+    "Spam",
+    "Misinformation",
+  ];
 
   useEffect(() => {
     if (session) {
-      console.log(session);
-      (async () => {
-        await fetchUserVotes(id, session.user.id, setHasUpvoted);
-      })();
+      console.log(session.user.id);
+      reportedBy.find((user) => {
+        if (user.user == session.user.id) {
+          setHasReported(user.type);
+        }
+      });
+      if (upvoteUsers.includes(session.user.id)) {
+        setHasUpvoted(true);
+      } else {
+        setHasUpvoted(false);
+      }
     }
-  }, [session, id]);
+  }, [session, reportedBy, upvoteUsers]);
+
+  useEffect(() => {
+    console.log(upvoteUsers);
+    console.log(hasReported);
+    console.log(reportedBy);
+  }, [hasReported, reportedBy, upvoteUsers]);
+
+  useEffect(() => {
+    console.log(hasUpvoted);
+  }, [hasUpvoted]);
 
   const fetchProjects = async () => {
     try {
@@ -152,21 +195,20 @@ const CTA = ({ url, id, upvotes }) => {
         transform="scale(1)"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
-        isDisabled={hasUpvoted == null || isLoading}
+        isDisabled={isUpvoteLoading || !session}
         _hover={{ transform: "scale(1.03)" }}
         onClick={async () => {
           if (hasUpvoted) {
-            setIsLoading(true);
+            setIsUpvoteLoading(true);
             await downvote({ projectID: id, userID: session.user.id });
+            // setHasUpvoted(false);
             await fetchProjects(id, session.user.id);
-            await fetchUserVotes(id, session.user.id, setHasUpvoted);
-            setIsLoading(false);
+            setIsUpvoteLoading(false);
           } else {
-            setIsLoading(true);
+            setIsUpvoteLoading(true);
             await upvote({ projectID: id, userID: session.user.id });
             await fetchProjects(id, session.user.id);
-            await fetchUserVotes(id, session.user.id, setHasUpvoted);
-            setIsLoading(false);
+            setIsUpvoteLoading(false);
           }
         }}
       >
@@ -206,21 +248,84 @@ const CTA = ({ url, id, upvotes }) => {
         >
           Claim Project
           <Text pl={1} as="span" fontSize="xs">
-            {"(soon)"}
+            (soon)
           </Text>
         </Button>
-        <Button
-          as={Link}
-          href="#"
-          color="pink.600"
-          fontWeight="normal"
-          bg="none"
-          p={0}
-          leftIcon={<Icon as={IoFlagOutline} />}
-          _hover={{ textDecoration: "none", color: "pink.400" }}
-        >
-          Report Project
-        </Button>
+        {hasReported ? (
+          <Flex textAlign={"left"} flexDir={"column"}>
+            <Text>You have already reported this project</Text>
+            <Text>Reason:</Text>
+            <Tag variant="outline" colorScheme="pink" w={"fit-content"}>
+              {hasReported}
+            </Tag>
+          </Flex>
+        ) : (
+          <>
+            <Button
+              onClick={onOpen}
+              color="pink.600"
+              fontWeight="normal"
+              bg="none"
+              p={0}
+              leftIcon={<Icon as={IoFlagOutline} />}
+              _hover={{ textDecoration: "none", color: "pink.400" }}
+              isDisabled={hasReported || !session}
+            >
+              Report Project
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose} isCentered size={"lg"}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>
+                  <Text fontSize={"2xl"}>Submit a report here</Text>
+                </ModalHeader>
+                <ModalCloseButton />
+
+                <ModalBody>
+                  <Text fontSize={"2xl"}>
+                    Help us understand the problem - What is going on with this
+                    project
+                  </Text>
+                  <Flex flexDir={"row"} flexWrap={"wrap"} gap={4} mt={6}>
+                    {reportTypes.map((type) => (
+                      <Button
+                        variant={"outline"}
+                        key={type}
+                        onClick={() => setReportedType(type)}
+                        color={reportedType == type ? "pink.600" : "gray.400"}
+                        borderColor={
+                          reportedType == type ? "pink.600" : "gray.400"
+                        }
+                        fontWeight="normal"
+                        bg="none"
+                        _hover={{ textDecoration: "none", color: "pink.400" }}
+                      >
+                        {type}
+                      </Button>
+                    ))}
+                  </Flex>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button
+                    colorScheme="pink"
+                    onClick={async () => {
+                      await report({
+                        projectID: id,
+                        userID: session.user.id,
+                        reportType: reportedType,
+                      });
+                      await fetchProjects(id, session.user.id);
+                      onClose();
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </>
+        )}
       </ButtonGroup>
     </VStack>
   );
