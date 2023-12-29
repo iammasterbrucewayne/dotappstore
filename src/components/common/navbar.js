@@ -16,13 +16,9 @@ import Image from "next/image";
 import _ from "lodash";
 import { FaUserCircle } from "react-icons/fa";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useEffect } from "react";
 
 const Navbar = () => {
   const { data: session } = useSession();
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
   return (
     <HStack py={2} px={8} maxW="6xl" mx="auto" justifyContent="space-between">
       <Link href="/">
@@ -40,7 +36,6 @@ const Navbar = () => {
             as={Link}
             variant="outline"
             colorScheme="black"
-            // href="/submit"
             boxShadow="4px 4px 0 black"
             transform="scale(1)"
             _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
@@ -71,7 +66,14 @@ const Navbar = () => {
               _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
             >
               {session ? (
-                <Text>{session.user.email || session.user.name}</Text>
+                <Text>
+                  {session?.user?.email || session?.user?.name.length > 15
+                    ? `${session?.user?.name.slice(
+                        0,
+                        4
+                      )}...${session?.user?.name.slice(-4)}`
+                    : session?.user?.name}
+                </Text>
               ) : (
                 <FaUserCircle />
               )}

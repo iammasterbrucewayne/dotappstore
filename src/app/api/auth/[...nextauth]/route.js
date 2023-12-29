@@ -1,11 +1,57 @@
 import NextAuth from "next-auth";
 import TwitterProvider from "next-auth/providers/twitter";
+import Credentials from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
+import { MongoClient } from "mongodb";
+const { decodeAddress, signatureVerify } = require("@polkadot/util-crypto");
+const { u8aToHex } = require("@polkadot/util");
+const isValidSignature = (signedMessage, signature, address) => {
+  const publicKey = decodeAddress(address);
+  const hexPublicKey = u8aToHex(publicKey);
+
+  return signatureVerify(signedMessage, signature, hexPublicKey).isValid;
+};
 
 const handler = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   providers: [
+    Credentials({
+      name: "credentials",
+      id: "credentials",
+      credentials: {
+        address: { label: "Address", type: "text" },
+        message: { label: "Message", type: "text" },
+        signature: { label: "Signature", type: "text" },
+      },
+      async authorize(credentials, req) {
+        const options = {};
+        const client = new MongoClient(process.env.MONGODB_USERS_URI, options);
+        const db = client.db("users");
+        const projectsCollection = db.collection("users");
+        const ifExists = await projectsCollection.findOne({
+          address: credentials.address,
+        });
+        if (!ifExists) {
+          await projectsCollection.insertOne({
+            address: credentials.address,
+          });
+        }
+        const user = {
+          name: credentials.address,
+        };
+        const isValid = isValidSignature(
+          credentials.message,
+          credentials.signature,
+          credentials.address
+        );
+        if (isValid) {
+          return user;
+        } else {
+          return null;
+        }
+      },
+    }),
     {
       id: "sendgrid",
       type: "email",
@@ -61,15 +107,33 @@ const handler = NextAuth({
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
       version: "2.0",
+      profile({ data }) {
+        return {
+          id: data.id,
+          name: data.name,
+          image: data.profile_image_url,
+          username: data.username,
+        };
+      },
     }),
   ],
   pages: {
     signIn: "/signin",
     verifyRequest: "/verifyrequest",
   },
+  secret: process.env.JWT_SECRET,
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
-    async session({ session, user }) {
-      session.user = user;
+    async jwt({ token, account, profile }) {
+      if (profile) {
+        token.username = profile.data.username;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.username = token.username;
       return session;
     },
   },

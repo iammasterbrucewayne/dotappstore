@@ -4,7 +4,7 @@ import TwitterSignInButton from "../../components/common/TwitterSignInButton";
 import EmailSignInForm from "../../components/common/EmailSignInForm";
 import ContextWrapper from "@/components/common/context-wrapper";
 
-import WalletConnect from "./wallet-connect";
+import WalletConnect from "../../components/common/wallet-connect";
 
 const SignInPage = () => {
   return (
@@ -41,9 +41,6 @@ const SignInPage = () => {
           <EmailSignInForm />
           <Text>OR</Text>
           <TwitterSignInButton />
-          {/* <Button colorScheme="green" marginTop={"10px"} width={"full"}>
-            Sign in with Web3 wallet
-          </Button> */}
           <WalletConnect />
         </Flex>
       </Flex>

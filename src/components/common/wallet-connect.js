@@ -5,7 +5,6 @@ import {
   Modal,
   ModalOverlay,
   ModalBody,
-  ModalFooter,
   ModalContent,
   ModalHeader,
   useDisclosure,
@@ -16,10 +15,6 @@ import {
   MenuList,
   GridItem,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
   Flex,
   Text,
   Grid,
@@ -28,14 +23,44 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getWallets } from "@talismn/connect-wallets";
 import { IoChevronDownOutline } from "react-icons/io5";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+
+const getSignature = async (account, callbackUrl) => {
+  try {
+    // NOTE: If `account` object is not handy, then use `getWalletBySource` to get the wallet then the signer.
+    console.log(account);
+    const signer = account.wallet.signer;
+    console.log(signer);
+    // NOTE: This line will trigger the extension popup
+    const { signature } = await signer.signRaw({
+      type: "payload",
+      data: `Login to dotappstore using ${account.address}`,
+      address: account.address,
+    });
+    console.log(signature);
+    await signIn("credentials", {
+      address: account.address.toString(),
+      message: `Login to dotappstore using ${account.address}`,
+      signature: signature.toString(),
+      callbackUrl: callbackUrl,
+    });
+  } catch (err) {
+    console.log(err);
+    console.log("Error while signing");
+  }
+};
 
 export default function WalletConnect() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [checked, setChecked] = useState(false);
   const [supportedWallets, setSupportedWallets] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [enabledAccounts, setEnabledAccounts] = useState(null);
   const [selectedAccount, setSelectedAccount] = useState(null);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
 
   useEffect(() => {
     setEnabledAccounts(null);
@@ -48,7 +73,6 @@ export default function WalletConnect() {
   const handleCheckboxChange = () => {
     setChecked(!checked);
   };
-  // const walletsOrder = ["talisman", "polkadot-js", "subwallet-js"];
 
   useEffect(() => {
     setSupportedWallets(getWallets());
@@ -183,8 +207,17 @@ export default function WalletConnect() {
                       </MenuList>
                     </Menu>
                   </Flex>
-                  <Button isDisabled={!checked} colorScheme="pink" h={"60px"}>
-                    Next
+                  <Button
+                    isDisabled={selectedAccount == null || isLoading}
+                    colorScheme="pink"
+                    h={"60px"}
+                    onClick={async () => {
+                      setIsLoading(true);
+                      await getSignature(selectedAccount, callbackUrl);
+                      setIsLoading(false);
+                    }}
+                  >
+                    Sign & Login
                   </Button>
                 </Flex>
               </ModalBody>
@@ -265,9 +298,14 @@ export default function WalletConnect() {
                         (wallet) => wallet.title === selected
                       );
                       if (selectedWallet) {
+                        console.log(selectedWallet);
                         await selectedWallet.enable("dotappstore").then(() => {
                           selectedWallet.subscribeAccounts((accounts) => {
-                            setEnabledAccounts(accounts);
+                            setEnabledAccounts(
+                              accounts.filter((account) => {
+                                return account.address.slice(0, 2) != "0x";
+                              })
+                            );
                             console.log(accounts);
                           });
                         });
