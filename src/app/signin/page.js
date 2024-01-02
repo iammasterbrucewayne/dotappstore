@@ -11,24 +11,19 @@ const SignInPage = () => {
   return (
     <ContextWrapper>
       <Navbar />
-      <VStack maxW={"lg"} mx={"auto"} mt={16}>
+      <VStack maxW={"lg"} mx={"auto"} mt={48}>
         <VStack>
           <Heading fontWeight="black">Sign In</Heading>
           <Text textAlign={"center"} fontSize="lg" mb={4}>
             Join a community dedicated to discovering and sharing Polkadot
             ecosystem projects
           </Text>
-          <TwitterSignInButton />
-          <WalletConnect />
-
-          <Button colorScheme="pink" size="lg" mt={2} width={"full"}>
-            Sign in with Web3 wallet
-          </Button>
-          {/* <WalletConnect /> */}
+          <EmailSignInForm />
           <Text fontWeight="semibold" my={4}>
             OR
           </Text>
-          <EmailSignInForm />
+          <TwitterSignInButton />
+          <WalletConnect />
         </VStack>
       </VStack>
     </ContextWrapper>
