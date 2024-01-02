@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Button, Input, Flex, Text, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { Button, Input, Flex, Text, FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function EmailSignInForm() {
@@ -35,29 +35,30 @@ export default function EmailSignInForm() {
   };
 
   return (
-    <Flex flexDir={"column"} width={"full"} marginTop={"20px"}>
       <FormControl isInvalid={error}>
-        <Text mb="8px">Email</Text>
+        <FormLabel htmlFor="email">Email address</FormLabel>
         <Input
           value={email}
           onChange={handleEmailChange}
           placeholder="name@example.com"
-          size="sm"
+          size="lg"
           type="email"
           borderColor={error ? "red.500" : "inherit"}
         />
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
         <Button
-          colorScheme="pink"
-          marginTop={"10px"}
+          background="black"
+          color="white"
+          size="lg"
+          mt={4}
           onClick={async () => {
             await handleSubmit(email);
           }}
           w={"full"}
+          _hover={{ bg: "gray.700" }}
         >
           Sign in with Email
         </Button>
       </FormControl>
-    </Flex>
   );
 }
