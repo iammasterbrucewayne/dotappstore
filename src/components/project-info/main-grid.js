@@ -1,10 +1,4 @@
-import {
-  Grid,
-  GridItem,
-  HStack,
-  Skeleton,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Grid, GridItem, HStack, Skeleton } from "@chakra-ui/react";
 import ProjectLogo from "@/components/common/project-logo";
 import CTA from "./cta";
 import MainContent from "./main-content";
@@ -18,14 +12,15 @@ const MainGrid = ({
   logo,
   appname,
   appdescription,
-  imageUrls,
   url,
+  twitterID,
   tags,
   featured,
   isLoaded,
   upvotes,
   upvoteUsers,
   reportedBy,
+  screenshots,
 }) => {
   const [isHidden, setIsHidden] = useState(true);
   useEffect(() => {
@@ -68,8 +63,11 @@ const MainGrid = ({
               mb={8}
               isLoaded={isLoaded}
             />
-
-            <ImageCarousel imageUrls={imageUrls} hidden={isHidden} />
+            {screenshots.length > 0 ? (
+              <ImageCarousel imageUrls={screenshots} hidden={isHidden} />
+            ) : (
+              <ImageCarousel hidden={isHidden} />
+            )}
           </Fragment>
         ) : (
           <Fragment>
@@ -117,11 +115,13 @@ const MainGrid = ({
       <GridItem align="center" colSpan={[1, 1, 1, 2]}>
         {isLoaded ? (
           <CTA
+            appname={appname}
             url={url}
             id={id}
             upvotes={upvotes}
             reportedBy={reportedBy}
             upvoteUsers={upvoteUsers}
+            twitterID={twitterID}
           />
         ) : (
           times(2, (index) => (

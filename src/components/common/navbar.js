@@ -2,10 +2,7 @@
 import {
   HStack,
   Button,
-  Flex,
   Text,
-  Heading,
-  Input,
   Link,
   Popover,
   PopoverTrigger,
@@ -34,12 +31,13 @@ const Navbar = () => {
         {session ? (
           <Button
             as={Link}
+            href="/submit"
+            isExternal={false}
             variant="outline"
             colorScheme="black"
             boxShadow="4px 4px 0 black"
             transform="scale(1)"
             _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
-            isExternal
           >
             Submit a project
           </Button>
@@ -67,12 +65,12 @@ const Navbar = () => {
             >
               {session ? (
                 <Text>
-                  {session?.user?.email || session?.user?.name.length > 15
-                    ? `${session?.user?.name.slice(
+                  {(session?.user?.name?.length > 15
+                    ? `${session?.user?.name?.slice(
                         0,
                         4
-                      )}...${session?.user?.name.slice(-4)}`
-                    : session?.user?.name}
+                      )}...${session?.user?.name?.slice(-4)}`
+                    : session?.user?.name) || session?.user?.email}
                 </Text>
               ) : (
                 <FaUserCircle />

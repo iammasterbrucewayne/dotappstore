@@ -4,16 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 import { MongoClient } from "mongodb";
-const { decodeAddress, signatureVerify } = require("@polkadot/util-crypto");
-const { u8aToHex } = require("@polkadot/util");
-const isValidSignature = (signedMessage, signature, address) => {
-  const publicKey = decodeAddress(address);
-  const hexPublicKey = u8aToHex(publicKey);
-
-  return signatureVerify(signedMessage, signature, hexPublicKey).isValid;
-};
-
-const handler = NextAuth({
+import { isValidSignature } from "@/lib/utils";
+export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     Credentials({
@@ -137,6 +129,8 @@ const handler = NextAuth({
       return session;
     },
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

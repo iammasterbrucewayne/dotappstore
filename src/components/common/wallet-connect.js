@@ -13,6 +13,7 @@ import {
   Menu,
   MenuButton,
   MenuList,
+  VStack,
   GridItem,
   MenuItem,
   Flex,
@@ -23,33 +24,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getWallets } from "@talismn/connect-wallets";
 import { IoChevronDownOutline } from "react-icons/io5";
-import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-
-const getSignature = async (account, callbackUrl) => {
-  try {
-    // NOTE: If `account` object is not handy, then use `getWalletBySource` to get the wallet then the signer.
-    console.log(account);
-    const signer = account.wallet.signer;
-    console.log(signer);
-    // NOTE: This line will trigger the extension popup
-    const { signature } = await signer.signRaw({
-      type: "payload",
-      data: `Login to dotappstore using ${account.address}`,
-      address: account.address,
-    });
-    console.log(signature);
-    await signIn("credentials", {
-      address: account.address.toString(),
-      message: `Login to dotappstore using ${account.address}`,
-      signature: signature.toString(),
-      callbackUrl: callbackUrl,
-    });
-  } catch (err) {
-    console.log(err);
-    console.log("Error while signing");
-  }
-};
+import { ApiPromise, WsProvider } from "@polkadot/api";
+import { getSignature } from "@/lib/utils";
 
 export default function WalletConnect() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,18 +34,32 @@ export default function WalletConnect() {
   const [supportedWallets, setSupportedWallets] = useState([]);
   const [selected, setSelected] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [enabledAccounts, setEnabledAccounts] = useState(null);
+  const [enabledAccounts, setEnabledAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
+  const [verifiedAccounts, setVerifiedAccounts] = useState([]);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
   useEffect(() => {
-    setEnabledAccounts(null);
-  }, [isOpen]);
+    async function checkIdentity() {
+      const wsProvider = new WsProvider("wss://rpc.polkadot.io");
+      const api = await ApiPromise.create({ provider: wsProvider });
+      enabledAccounts?.map(async (account) => {
+        const identity = await api.query.identity.identityOf(account.address);
+        if (!identity.isNone) {
+          setVerifiedAccounts((verifiedAccounts) => [
+            ...verifiedAccounts,
+            account.address,
+          ]);
+        }
+      });
+    }
+    checkIdentity();
+  }, [enabledAccounts]);
 
   useEffect(() => {
-    console.log(enabledAccounts);
-  }, [enabledAccounts]);
+    setEnabledAccounts([]);
+  }, [isOpen]);
 
   const handleCheckboxChange = () => {
     setChecked(!checked);
@@ -77,7 +68,6 @@ export default function WalletConnect() {
   useEffect(() => {
     setSupportedWallets(getWallets());
   }, []);
-  console.log(supportedWallets);
 
   return (
     <>
@@ -92,7 +82,7 @@ export default function WalletConnect() {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          {selected && enabledAccounts != null ? (
+          {selected && checked && enabledAccounts.length != 0 ? (
             <>
               <ModalHeader textAlign={"center"}>
                 <Flex flexDir={"column"}>
@@ -167,14 +157,18 @@ export default function WalletConnect() {
                           return (
                             <MenuItem
                               key={account.address}
+                              isDisabled={
+                                !verifiedAccounts.includes(account.address)
+                              }
                               onClick={() => {
                                 setSelectedAccount(account);
                               }}
                             >
                               <Grid
-                                templateColumns="auto 1fr"
+                                templateColumns="auto 1fr auto"
                                 columnGap={4}
                                 rowGap={1}
+                                w="full" // Ensure the grid spans the full width
                               >
                                 <GridItem colSpan={1} rowSpan={2}>
                                   <Flex
@@ -191,15 +185,26 @@ export default function WalletConnect() {
                                     />
                                   </Flex>
                                 </GridItem>
+
                                 <GridItem colSpan={1}>
-                                  <Text>{account.name}</Text>
+                                  <VStack align="start">
+                                    <Text>{account.name}</Text>
+                                    <Text color={"gray.400"}>
+                                      {account.address.slice(0, 4)}...
+                                      {account.address.slice(-4)}
+                                    </Text>
+                                  </VStack>
                                 </GridItem>
-                                <GridItem colSpan={1}>
-                                  <Text color={"gray.400"}>
-                                    {account.address.slice(0, 4)}...
-                                    {account.address.slice(-4)}
-                                  </Text>
-                                </GridItem>
+
+                                {!verifiedAccounts.includes(account.address) ? (
+                                  <GridItem colStart={3} textAlign="right">
+                                    <Text color={"pink.400"}>
+                                      Identity not found
+                                    </Text>
+                                  </GridItem>
+                                ) : (
+                                  ""
+                                )}
                               </Grid>
                             </MenuItem>
                           );
@@ -298,7 +303,6 @@ export default function WalletConnect() {
                         (wallet) => wallet.title === selected
                       );
                       if (selectedWallet) {
-                        console.log(selectedWallet);
                         await selectedWallet.enable("dotappstore").then(() => {
                           selectedWallet.subscribeAccounts((accounts) => {
                             setEnabledAccounts(
@@ -306,7 +310,6 @@ export default function WalletConnect() {
                                 return account.address.slice(0, 2) != "0x";
                               })
                             );
-                            console.log(accounts);
                           });
                         });
                       }

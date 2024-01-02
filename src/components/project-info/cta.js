@@ -19,103 +19,25 @@ import {
 import {
   IoCaretUp,
   IoFlagOutline,
-  IoShieldCheckmarkOutline,
   IoCheckmarkSharp,
   IoCloseSharp,
+  IoPencil,
 } from "react-icons/io5";
+import ClaimProject from "./claimProject";
 import { useProjects } from "@/lib/store/useProjects";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { upvote, report, downvote } from "@/lib/utils";
 
-const upvote = async ({ projectID, userID }) => {
-  try {
-    const response = await fetch("/api/upvote", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ projectID, userID }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log(data.message);
-    } else {
-      console.error(data.message);
-      if (response.status === 404) {
-        alert("An error occurred while upvoting. Please try again.");
-      } else {
-        alert("An error occurred while upvoting. Please try again.");
-      }
-    }
-  } catch (error) {
-    console.error("Error while upvoting:", error);
-    alert("An unexpected error occurred. Please try again.");
-  }
-};
-
-const report = async ({ projectID, userID, reportType }) => {
-  try {
-    const response = await fetch("/api/report", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ projectID, userID, reportType }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log(data.message);
-    } else {
-      console.error(data.message);
-      if (response.status === 404) {
-        alert("An error occurred while Reporting. Please try again.");
-      } else if (response.status == 409) {
-        alert(data.message);
-      } else {
-        alert("An error occurred while Reporting. Please try again.");
-      }
-    }
-  } catch (error) {
-    console.error("Error while Reporting:", error);
-    alert("An unexpected error occurred. Please try again.");
-  }
-};
-
-const downvote = async ({ projectID, userID }) => {
-  try {
-    const response = await fetch("/api/downvote", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ projectID, userID }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log(data.message);
-    } else if (response.status == 409) {
-      console.log(data.message);
-    } else {
-      console.error(data.message);
-      if (response.status === 404) {
-        alert("An error occurred while downvoting. Please try again.");
-      } else {
-        alert("An error occurred while downvoting. Please try again.");
-      }
-    }
-  } catch (error) {
-    console.error("Error while downvoting:", error);
-    alert("An unexpected error occurred. Please try again.");
-  }
-};
-
-const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
+const CTA = ({
+  appname,
+  url,
+  id,
+  upvotes,
+  reportedBy,
+  upvoteUsers,
+  twitterID,
+}) => {
   const { data: session } = useSession();
   const { projects, setProjects } = useProjects();
   const [hasUpvoted, setHasUpvoted] = useState(false);
@@ -124,6 +46,7 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
   const [isUpvoteLoading, setIsUpvoteLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [reportedType, setReportedType] = useState(null);
+  const [isReportLoading, setIsReportLoading] = useState(false);
   const reportTypes = [
     "Scam",
     "Harassment",
@@ -137,13 +60,18 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
 
   useEffect(() => {
     if (session) {
-      console.log(session.user.id);
       reportedBy.find((user) => {
-        if (user.user == session.user.id) {
+        if (
+          user.user == session?.user?.username ||
+          user.user == session?.user?.email
+        ) {
           setHasReported(user.type);
         }
       });
-      if (upvoteUsers.includes(session.user.id)) {
+      if (
+        upvoteUsers.includes(session.user.username) ||
+        upvoteUsers.includes(session.user.email)
+      ) {
         setHasUpvoted(true);
       } else {
         setHasUpvoted(false);
@@ -151,23 +79,13 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
     }
   }, [session, reportedBy, upvoteUsers]);
 
-  useEffect(() => {
-    console.log(upvoteUsers);
-    console.log(hasReported);
-    console.log(reportedBy);
-  }, [hasReported, reportedBy, upvoteUsers]);
-
-  useEffect(() => {
-    console.log(hasUpvoted);
-  }, [hasUpvoted]);
-
   const fetchProjects = async () => {
     try {
       const response = await fetch("/api/get-projects");
       const projectsFromApi = await response.json();
       setProjects(projectsFromApi);
     } catch (error) {
-      console.error("Failed to fetch projects:", error);
+      alert("Failed to fetch projects:", error);
     }
   };
 
@@ -200,13 +118,18 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
         onClick={async () => {
           if (hasUpvoted) {
             setIsUpvoteLoading(true);
-            await downvote({ projectID: id, userID: session.user.id });
-            // setHasUpvoted(false);
+            await downvote({
+              projectID: id,
+              userID: session?.user?.username || session?.user?.email,
+            });
             await fetchProjects(id, session.user.id);
             setIsUpvoteLoading(false);
           } else {
             setIsUpvoteLoading(true);
-            await upvote({ projectID: id, userID: session.user.id });
+            await upvote({
+              projectID: id,
+              userID: session?.user?.username || session?.user?.email,
+            });
             await fetchProjects(id, session.user.id);
             setIsUpvoteLoading(false);
           }
@@ -235,24 +158,32 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
         spacing={0}
         mt={3}
       >
-        <Button
-          as={Link}
-          href="#"
-          color="pink.600"
-          fontWeight="normal"
-          bg="none"
-          p={0}
-          leftIcon={<Icon as={IoShieldCheckmarkOutline} />}
-          _hover={{ textDecoration: "none", color: "pink.400" }}
-          isDisabled
-        >
-          Claim Project
-          <Text pl={1} as="span" fontSize="xs">
-            (soon)
-          </Text>
-        </Button>
+        {("" || session?.user?.username?.toLowerCase()) ==
+        twitterID?.toLowerCase() ? (
+          <Button
+            as={Link}
+            href={`/edit/${id}`}
+            colorScheme="pink"
+            variant="outline"
+            w="full"
+            py={4}
+            leftIcon={<IoPencil />}
+            boxShadow="4px 4px 0 #B83280"
+            transform="scale(1)"
+            _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
+          >
+            Edit Project
+          </Button>
+        ) : (
+          <ClaimProject
+            id={id}
+            appname={appname}
+            session={session}
+            twitterID={twitterID}
+          />
+        )}
         {hasReported ? (
-          <Flex textAlign={"left"} flexDir={"column"}>
+          <Flex textAlign={"left"} flexDir={"column"} marginTop={2}>
             <Text>You have already reported this project</Text>
             <Text>Reason:</Text>
             <Tag variant="outline" colorScheme="pink" w={"fit-content"}>
@@ -262,14 +193,15 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
         ) : (
           <>
             <Button
-              onClick={onOpen}
+              onClick={session ? onOpen : signIn}
               color="pink.600"
               fontWeight="normal"
               bg="none"
               p={0}
+              marginTop={2}
               leftIcon={<Icon as={IoFlagOutline} />}
               _hover={{ textDecoration: "none", color: "pink.400" }}
-              isDisabled={hasReported || !session}
+              isDisabled={hasReported}
             >
               Report Project
             </Button>
@@ -279,7 +211,7 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
                 <ModalHeader>
                   <Text fontSize={"2xl"}>Submit a report here</Text>
                 </ModalHeader>
-                <ModalCloseButton />
+                <ModalCloseButton isDisabled={isReportLoading} />
 
                 <ModalBody>
                   <Text fontSize={"2xl"}>
@@ -309,13 +241,16 @@ const CTA = ({ url, id, upvotes, reportedBy, upvoteUsers }) => {
                 <ModalFooter>
                   <Button
                     colorScheme="pink"
+                    isDisabled={!reportedType || isReportLoading}
                     onClick={async () => {
+                      setIsReportLoading(true);
                       await report({
                         projectID: id,
-                        userID: session.user.id,
+                        userID: session?.user?.username || session?.user?.email,
                         reportType: reportedType,
                       });
-                      await fetchProjects(id, session.user.id);
+                      await fetchProjects();
+                      setIsReportLoading(false);
                       onClose();
                     }}
                   >

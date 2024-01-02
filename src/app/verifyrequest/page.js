@@ -1,7 +1,5 @@
 "use client";
 import { Flex, Heading, Image, Text, Input, Button } from "@chakra-ui/react";
-import TwitterSignInButton from "../../components/common/TwitterSignInButton";
-import EmailSignInForm from "../../components/common/EmailSignInForm";
 import ContextWrapper from "@/components/common/context-wrapper";
 
 const SignInPage = () => {
