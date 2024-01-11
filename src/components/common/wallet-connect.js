@@ -168,7 +168,7 @@ export default function WalletConnect() {
                                 templateColumns="auto 1fr auto"
                                 columnGap={4}
                                 rowGap={1}
-                                w="full" // Ensure the grid spans the full width
+                                w="full"
                               >
                                 <GridItem colSpan={1} rowSpan={2}>
                                   <Flex
@@ -224,6 +224,19 @@ export default function WalletConnect() {
                   >
                     Sign & Login
                   </Button>
+                </Flex>
+                <Flex flexDir={"column"} marginBottom={2} alignItems={"center"}>
+                  <Text fontSize={"md"} justifyContent={"center"}>
+                    Having issues connecting your account?
+                  </Text>
+                  <Text fontSize={"md"}>
+                    <Link
+                      href="https://docs.talisman.xyz/talisman/navigating-the-paraverse/across-the-paraverse/connect-your-wallet-to-a-website-dapp"
+                      style={{ color: "#d0307a" }}
+                    >
+                      <b> Check this out </b>
+                    </Link>
+                  </Text>
                 </Flex>
               </ModalBody>
             </>

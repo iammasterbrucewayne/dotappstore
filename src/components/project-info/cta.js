@@ -63,14 +63,16 @@ const CTA = ({
       reportedBy.find((user) => {
         if (
           user.user == session?.user?.username ||
-          user.user == session?.user?.email
+          user.user == session?.user?.email ||
+          user.user == session?.user?.name
         ) {
           setHasReported(user.type);
         }
       });
       if (
         upvoteUsers.includes(session.user.username) ||
-        upvoteUsers.includes(session.user.email)
+        upvoteUsers.includes(session.user.email) ||
+        upvoteUsers.includes(session.user.name)
       ) {
         setHasUpvoted(true);
       } else {
@@ -120,17 +122,23 @@ const CTA = ({
             setIsUpvoteLoading(true);
             await downvote({
               projectID: id,
-              userID: session?.user?.username || session?.user?.email,
+              userID:
+                session?.user?.username ||
+                session?.user?.email ||
+                session?.user?.name,
             });
-            await fetchProjects(id, session.user.id);
+            await fetchProjects();
             setIsUpvoteLoading(false);
           } else {
             setIsUpvoteLoading(true);
             await upvote({
               projectID: id,
-              userID: session?.user?.username || session?.user?.email,
+              userID:
+                session?.user?.username ||
+                session?.user?.email ||
+                session?.user?.name,
             });
-            await fetchProjects(id, session.user.id);
+            await fetchProjects();
             setIsUpvoteLoading(false);
           }
         }}
@@ -246,7 +254,10 @@ const CTA = ({
                       setIsReportLoading(true);
                       await report({
                         projectID: id,
-                        userID: session?.user?.username || session?.user?.email,
+                        userID:
+                          session?.user?.username ||
+                          session?.user?.email ||
+                          session?.user?.name,
                         reportType: reportedType,
                       });
                       await fetchProjects();
