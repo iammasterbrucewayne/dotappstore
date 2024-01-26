@@ -15,6 +15,7 @@ import {
   useDisclosure,
   Flex,
   Tag,
+  Tooltip,
 } from "@chakra-ui/react";
 import {
   IoCaretUp,
@@ -93,57 +94,63 @@ const CTA = ({
 
   return (
     <VStack>
-      <Button
-        colorScheme={hasUpvoted && isHovering ? "red" : "pink"}
-        w="full"
-        py={8}
-        leftIcon={
-          hasUpvoted ? (
-            isHovering ? (
-              <IoCloseSharp />
-            ) : (
-              <IoCheckmarkSharp />
-            )
-          ) : isHovering ? (
-            <IoCaretUp />
-          ) : (
-            <IoCaretUp />
-          )
-        }
-        variant={hasUpvoted && isHovering ? "outline" : "solid"}
-        border="1px solid"
-        rightIcon={hasUpvoted && isHovering ? "" : <Text>{upvotes}</Text>}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-        isDisabled={isUpvoteLoading || !session}
-        onClick={async () => {
-          if (hasUpvoted) {
-            setIsUpvoteLoading(true);
-            await downvote({
-              projectID: id,
-              userID:
-                session?.user?.username ||
-                session?.user?.email ||
-                session?.user?.name,
-            });
-            await fetchProjects();
-            setIsUpvoteLoading(false);
-          } else {
-            setIsUpvoteLoading(true);
-            await upvote({
-              projectID: id,
-              userID:
-                session?.user?.username ||
-                session?.user?.email ||
-                session?.user?.name,
-            });
-            await fetchProjects();
-            setIsUpvoteLoading(false);
-          }
-        }}
+      <Tooltip
+        label="You must be logged in to upvote projects"
+        isDisabled={session}
+        hasArrow
       >
-        {hasUpvoted ? (isHovering ? "Remove Upvote" : "Upvoted") : "Upvote"}
-      </Button>
+        <Button
+          colorScheme={hasUpvoted && isHovering ? "red" : "pink"}
+          w="full"
+          py={8}
+          leftIcon={
+            hasUpvoted ? (
+              isHovering ? (
+                <IoCloseSharp />
+              ) : (
+                <IoCheckmarkSharp />
+              )
+            ) : isHovering ? (
+              <IoCaretUp />
+            ) : (
+              <IoCaretUp />
+            )
+          }
+          variant={hasUpvoted && isHovering ? "outline" : "solid"}
+          border="1px solid"
+          rightIcon={hasUpvoted && isHovering ? "" : <Text>{upvotes}</Text>}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+          isDisabled={isUpvoteLoading || !session}
+          onClick={async () => {
+            if (hasUpvoted) {
+              setIsUpvoteLoading(true);
+              await downvote({
+                projectID: id,
+                userID:
+                  session?.user?.username ||
+                  session?.user?.email ||
+                  session?.user?.name,
+              });
+              await fetchProjects();
+              setIsUpvoteLoading(false);
+            } else {
+              setIsUpvoteLoading(true);
+              await upvote({
+                projectID: id,
+                userID:
+                  session?.user?.username ||
+                  session?.user?.email ||
+                  session?.user?.name,
+              });
+              await fetchProjects();
+              setIsUpvoteLoading(false);
+            }
+          }}
+        >
+          {hasUpvoted ? (isHovering ? "Remove Upvote" : "Upvoted") : "Upvote"}
+        </Button>
+      </Tooltip>
       <Button
         colorScheme="pink"
         variant="outline"
