@@ -57,13 +57,13 @@ export default function EmailSignInForm() {
       <Button
         colorScheme="pink"
         mt={4}
+        py={6}
         onClick={async () => {
           await handleSubmit(email);
         }}
         w={"full"}
-        _hover={{ bg: "gray.700" }}
       >
-        Sign in with Email
+        Login
       </Button>
     </FormControl>
   );

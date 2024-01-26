@@ -32,7 +32,6 @@ const Navbar = () => {
           <Button
             as={Link}
             href="/submit"
-            isExternal={false}
             variant="outline"
             colorScheme="black"
             boxShadow="4px 4px 0 black"
@@ -49,7 +48,6 @@ const Navbar = () => {
             boxShadow="4px 4px 0 black"
             transform="scale(1)"
             _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
-            isExternal
           >
             Submit a project
           </Button>

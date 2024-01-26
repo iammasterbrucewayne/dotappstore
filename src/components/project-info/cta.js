@@ -116,7 +116,6 @@ const CTA = ({
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         isDisabled={isUpvoteLoading || !session}
-        _hover={{ transform: "scale(1.03)" }}
         onClick={async () => {
           if (hasUpvoted) {
             setIsUpvoteLoading(true);
@@ -152,9 +151,8 @@ const CTA = ({
         py={8}
         as={Link}
         href={url}
-        boxShadow="4px 4px 0 #B83280"
-        transform="scale(1)"
-        _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
+        // boxShadow="4px 4px 0 #B83280"
+        _hover={{ textDecoration: "none", color: "gray.900" }}
         isExternal
       >
         Try it

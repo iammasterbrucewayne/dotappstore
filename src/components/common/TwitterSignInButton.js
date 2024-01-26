@@ -9,12 +9,16 @@ const TwitterSignInButton = () => {
   const callbackUrl = searchParams.get("callbackUrl");
   return (
     <Button
-      colorScheme="twitter"
+      bg="black"
+      color="white"
       width={"full"}
+      mt={2}
+      py={6}
       leftIcon={<RiTwitterXFill />}
+      _hover={{bg: "gray.700"}}
       onClick={() => signIn("twitter", { callbackUrl })}
     >
-      Sign in with Twitter
+      Login with Twitter
     </Button>
   );
 };

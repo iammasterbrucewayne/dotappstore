@@ -23,7 +23,7 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getWallets } from "@talismn/connect-wallets";
-import { IoChevronDownOutline } from "react-icons/io5";
+import { IoChevronDownOutline, IoWallet } from "react-icons/io5";
 import { useSearchParams } from "next/navigation";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { getSignature } from "@/lib/utils";
@@ -72,12 +72,13 @@ export default function WalletConnect() {
   return (
     <>
       <Button
-        colorScheme="green"
-        marginTop={"10px"}
+        colorScheme="purple"
+        py={6}
         width={"full"}
         onClick={onOpen}
+        leftIcon={<IoWallet />}
       >
-        Sign in with Web3 wallet
+        Login with Web3 wallet
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
