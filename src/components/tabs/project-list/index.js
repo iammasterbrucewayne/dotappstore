@@ -4,14 +4,17 @@ import _ from "lodash";
 
 export default function ProjectList({ category, projects }) {
   const displayAll = category === "All";
+
+  // Initial filtering based on category
   const filteredProjects = displayAll
     ? projects
     : _.filter(projects, (project) => _.includes(project.tags, category));
+
+  // Sorting the filtered projects by 'upvotes' in descending order
+  const sortedProjects = _.orderBy(filteredProjects, ["upvotes"], ["desc"]);
+
   return (
     <TabPanel>
-      <Text fontSize="sm" color="gray.600" mb={6}>
-        {_.size(filteredProjects)} projects filtered by &quot;{category}&quot;
-      </Text>
       <Stack
         border="1px"
         bg="blackAlpha.900"
@@ -21,7 +24,7 @@ export default function ProjectList({ category, projects }) {
         spacing={0}
         divider={<StackDivider borderColor="gray.700" />}
       >
-        {_?.map(filteredProjects, (_content, index) => (
+        {_.map(sortedProjects, (_content, index) => (
           <ProjectItem {..._content} key={index} />
         ))}
       </Stack>
