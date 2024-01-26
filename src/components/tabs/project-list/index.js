@@ -1,4 +1,4 @@
-import { Stack, StackDivider, TabPanel } from "@chakra-ui/react";
+import { Stack, StackDivider, TabPanel, Text } from "@chakra-ui/react";
 import ProjectItem from "./project-item";
 import _ from "lodash";
 
