@@ -12,7 +12,9 @@ import {
   TagCloseButton,
   Text,
   Button,
+  FormControl,
 } from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
 
 export default function ProjectCategory({
   projectInfo,
@@ -34,6 +36,7 @@ export default function ProjectCategory({
     "Media",
     "NFT",
     "Content",
+    "Education",
     "Explorer",
     "DeFi",
     "Yield Farming",
@@ -75,23 +78,23 @@ export default function ProjectCategory({
 
   return (
     <Flex flexDir="column" width={"full"}>
-      <Heading>Category</Heading>
-      <Text fontSize={"xl"}>Select upto 3 categories</Text>
-      <Input
-        mt={4}
-        width={"full"}
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder="Defi, Infrastructure, NFT, ..."
-      />
-      <Flex mt={2}>
+      <Heading fontWeight="black">Category</Heading>
+      <Text fontSize={"lg"}>Select upto 3 categories</Text>
+      <FormControl>
+        <Input
+          mt={4}
+          width={"full"}
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="Defi, Infrastructure, NFT, ..."
+        />
+      </FormControl>
+      <Flex mt={4}>
         {projectInfo.tags.map((tag, index) => (
           <Tag
             key={index}
             m={1}
-            variant={"outline"}
             colorScheme="pink"
-            size={"lg"}
           >
             {tag}
             <TagCloseButton onClick={() => handleRemoveTag(tag)} />
@@ -112,14 +115,18 @@ export default function ProjectCategory({
         </MenuList>
       </Menu>
       <Divider mt={12} borderWidth={"thin"} />
-      <Heading mt={12}>Project Status</Heading>
-      <Text fontSize={"xl"} mt={2}>
+      <Heading mt={12} fontWeight="black">
+        Project Status
+      </Heading>
+      <Text fontSize={"lg"} mt={2}>
         How far along is your project?
       </Text>
       <Flex w={"full"} flexDir={"column"} gap={4} mt={4}>
         <Button
           variant={"outline"}
-          colorScheme={projectInfo?.status == "Live" ? "pink" : "black"}
+          colorScheme={projectInfo?.status === "Live" ? "pink" : "gray"}
+          leftIcon={projectInfo?.status === "Live" && <CheckIcon />}
+          py={6}
           onClick={() => {
             setProjectInfo({ ...projectInfo, status: "Live" });
           }}
@@ -128,7 +135,9 @@ export default function ProjectCategory({
         </Button>
         <Button
           variant={"outline"}
-          colorScheme={projectInfo?.status == "Building" ? "pink" : "black"}
+          colorScheme={projectInfo?.status == "Building" ? "pink" : "gray"}
+          leftIcon={projectInfo?.status === "Building" && <CheckIcon />}
+          py={6}
           onClick={() => {
             setProjectInfo({ ...projectInfo, status: "Building" });
           }}
@@ -143,6 +152,8 @@ export default function ProjectCategory({
           boxShadow="4px 4px 0 black"
           transform="scale(1)"
           marginTop={4}
+          px={8}
+          py={6}
           _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
           isExternal
           onClick={() => {
@@ -157,6 +168,8 @@ export default function ProjectCategory({
           boxShadow="4px 4px 0 black"
           transform="scale(1)"
           marginTop={4}
+          px={8}
+          py={6}
           _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
           isExternal
           isDisabled={projectInfo.tags.length < 1 || !projectInfo?.status}

@@ -1,5 +1,5 @@
 "use client";
-import { VStack } from "@chakra-ui/react";
+
 import Navbar from "@/components/common/navbar";
 import ContextWrapper from "@/components/common/context-wrapper";
 import { useState } from "react";
@@ -114,9 +114,7 @@ export default function Submit() {
   return (
     <ContextWrapper>
       <Navbar />
-      <VStack marginTop={"50px"} p={8} mx="auto" maxW="6xl" align={"start"}>
-        {renderStage()}
-      </VStack>
+      {renderStage()}
     </ContextWrapper>
   );
 }

@@ -1,4 +1,15 @@
-import { Input, Heading, Text, Flex, Textarea, Button } from "@chakra-ui/react";
+import {
+  Input,
+  Heading,
+  Text,
+  Flex,
+  Textarea,
+  Button,
+  FormControl,
+  FormLabel,
+  HStack,
+  VStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function ProjectDetails({
@@ -33,62 +44,73 @@ export default function ProjectDetails({
   };
 
   return (
-    <>
-      <Heading>Edit your Polkadot project</Heading>
-      <Flex flexDir={"column"} gap={"20px"} marginTop={"50px"} width={"full"}>
-        <Flex flexDir={"column"}>
-          <Flex justify={"space-between"}>
-            <Text fontSize={"2xl"}>Project</Text>
-            <Text>{projectName.length} / 40</Text>
-          </Flex>
-          <Input
-            placeholder="0xTest"
-            width={"full"}
-            value={projectName}
-            onChange={handleProjectChange}
-            maxLength={40}
-          />
-        </Flex>
-        <Flex flexDir={"column"}>
-          <Flex justify={"space-between"}>
-            <Text fontSize={"2xl"}>Tagline</Text>
-            <Text> {tagline.length} / 260</Text>
-          </Flex>
-          <Textarea
-            height={"100px"}
-            placeholder="A test Project"
-            width={"full"}
-            value={tagline}
-            onChange={handleTaglineChange}
-            flexWrap={"wrap"}
-            maxLength={260}
-          />
-        </Flex>
-        <Flex flexDir={"column"}>
-          <Text fontSize={"2xl"}>Website Link</Text>
-          <Input
-            placeholder="test.com"
-            width={"full"}
-            value={website}
-            onChange={handleWebsiteChange}
-          />
-        </Flex>
-        <Flex flexDir={"column"}>
-          <Flex justify={"space-between"}>
-            <Text fontSize={"2xl"}>Description</Text>
-            <Text>{description.length} / 400</Text>
-          </Flex>
-          <Textarea
-            height={"100px"}
-            placeholder="Test Description"
-            width={"full"}
-            value={description}
-            onChange={handleDescriptionChange}
-            flexWrap={"wrap"}
-            maxLength={400}
-          />
-        </Flex>
-      </Flex>
+    <VStack w="full" align="start" gap={6}>
+      <Heading fontWeight="black">Edit your Polkadot project</Heading>
+      <FormControl>
+        <FormLabel>
+          <HStack justifyContent="space-between">
+            <Text>Project</Text>
+            <Text fontWeight="normal" color="gray.500">
+              {projectName.length} / 40
+            </Text>
+          </HStack>
+        </FormLabel>
+        <Input
+          placeholder="0xTest"
+          width={"full"}
+          value={projectName}
+          onChange={handleProjectChange}
+          maxLength={40}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>
+          <HStack justifyContent="space-between">
+            <Text>Tagline</Text>
+            <Text fontWeight="normal" color="gray.500">
+              {tagline.length} / 260
+            </Text>
+          </HStack>
+        </FormLabel>
+        <Textarea
+          height={"100px"}
+          placeholder="A test Project"
+          width={"full"}
+          value={tagline}
+          onChange={handleTaglineChange}
+          flexWrap={"wrap"}
+          maxLength={260}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Website Link</FormLabel>
+        <Input
+          placeholder="test.com"
+          width={"full"}
+          value={website}
+          onChange={handleWebsiteChange}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>
+          <HStack justifyContent="space-between">
+            <Text>Description</Text>
+            <Text fontWeight="normal" color="gray.500">
+              {description.length} / 400
+            </Text>
+          </HStack>
+        </FormLabel>
+        <Textarea
+          height={"100px"}
+          placeholder="Test Description"
+          width={"full"}
+          value={description}
+          onChange={handleDescriptionChange}
+          flexWrap={"wrap"}
+          maxLength={400}
+        />
+      </FormControl>
+
       <Button
         variant="outline"
         alignSelf={"flex-start"}
@@ -96,6 +118,8 @@ export default function ProjectDetails({
         boxShadow="4px 4px 0 black"
         transform="scale(1)"
         marginTop={4}
+        px={8}
+        py={6}
         _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
         isDisabled={
           projectName.length == 0 ||
@@ -116,6 +140,6 @@ export default function ProjectDetails({
       >
         Next Step: Images and Media
       </Button>
-    </>
+    </VStack>
   );
 }

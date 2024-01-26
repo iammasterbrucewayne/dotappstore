@@ -10,6 +10,7 @@ import {
   Grid,
   Image,
   VStack,
+  HStack,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { CiImageOn } from "react-icons/ci";
@@ -85,13 +86,13 @@ export default function ProjectImages({
   };
 
   return (
-    <VStack maxW={"6xl"} alignItems={"start"} gap={"50px"}>
-      <Flex flexDir={"column"}>
-        <Heading>Thumbnail</Heading>
-        <Text fontSize={"xl"}>
-          Let&apos;s make people can find your project easily
+    <VStack maxW={"6xl"} alignItems={"start"} gap={12} w="full" mx="auto" px={8} pb={12}>
+      <Flex flexDir={"column"} mt={8}>
+        <Heading fontWeight="black">Thumbnail</Heading>
+        <Text fontSize={"lg"}>
+          Let&apos;s make sure people can find your project easily
         </Text>
-        <Flex flexDir={"column"} gap={"20px"} marginTop={"50px"} width={"full"}>
+        <Flex flexDir={"column"} gap={"20px"} marginTop={8} width={"full"}>
           <Grid templateColumns="auto 1fr" columnGap={8} rowGap={4}>
             <GridItem colSpan={1} rowSpan={2}>
               <Box
@@ -177,19 +178,20 @@ export default function ProjectImages({
           </Grid>
         </Flex>
       </Flex>
-      <Flex flexDir={"column"} gap={"10px"}>
-        <Heading>Screenshots</Heading>
-        <Text fontSize={"xl"}>
+      <VStack w="full" align="start">
+        <Heading fontWeight="black">Screenshots</Heading>
+        <Text fontSize={"lg"}>
           We recommend atleast 3 screenshots of your project
         </Text>
         <Box
           position="relative"
+          mt={6}
           p="1"
           border="3px dotted"
           borderRadius="md"
           borderColor={"#d1d2d5"}
           h="lg"
-          w={"6xl"}
+          w="full"
           overflow="visible"
           display="flex"
           alignItems="center"
@@ -220,7 +222,7 @@ export default function ProjectImages({
           </Flex>
         </Box>
         <Flex flexDir={"row"} gap={4} marginTop={4}>
-          {screenshotPreviews.map((url, index) => (
+          {screenshotPreviews?.map((url, index) => (
             <Box
               key={index}
               position="relative"
@@ -274,13 +276,15 @@ export default function ProjectImages({
             </Box>
           ))}
         </Flex>
-        <Flex flexDir={"row"} justify={"space-between"} marginTop={8}>
+        <HStack justify="space-between" w="full">
           <Button
             variant="outline"
             colorScheme="black"
             boxShadow="4px 4px 0 black"
             transform="scale(1)"
             marginTop={4}
+            px={8}
+            py={6}
             _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
             isExternal
             onClick={() => {
@@ -295,6 +299,8 @@ export default function ProjectImages({
             boxShadow="4px 4px 0 black"
             transform="scale(1)"
             marginTop={4}
+            px={8}
+            py={6}
             _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
             isExternal
             isDisabled={!logo || screenshots.length < 1}
@@ -304,8 +310,8 @@ export default function ProjectImages({
           >
             Next Step: Category
           </Button>
-        </Flex>
-      </Flex>
+        </HStack>
+      </VStack>
     </VStack>
   );
 }

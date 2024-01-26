@@ -1,4 +1,4 @@
-import { Flex, Spinner, Heading, Text, Input, Button } from "@chakra-ui/react";
+import { Flex, Spinner, Heading, Text, Input, Button, VStack, FormControl, FormLabel, HStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function ProjectSocials({
@@ -22,10 +22,15 @@ export default function ProjectSocials({
   };
 
   return (
-    <Flex flexDir={"column"} gap={10} w={"full"}>
-      <Heading>Socials</Heading>
-      <Flex flexDir={"column"} width={"full"}>
-        <Text fontSize={"2xl"}>Twitter</Text>
+    <VStack maxW="6xl" w="full" align="start" gap={6}>
+      <Heading fontWeight="black">Socials</Heading>
+      <FormControl>
+        <FormLabel>
+          <HStack justifyContent="space-between">
+            <Text>Twitter</Text>
+            <Text fontWeight="normal" color="gray.500"></Text>
+          </HStack>
+        </FormLabel>
         <Input
           placeholder="Project Username"
           width={"full"}
@@ -33,12 +38,16 @@ export default function ProjectSocials({
           onChange={handleTwitterChange}
           maxLength={40}
         />
-      </Flex>
-      <Flex flexDir={"column"} width={"full"}>
-        <Flex justify={"space-between"}>
-          <Text fontSize={"2xl"}>Discord</Text>
-          <Text> Optional</Text>
-        </Flex>
+      </FormControl>
+      <FormControl>
+        <FormLabel>
+          <HStack justifyContent="space-between">
+            <Text>Discord</Text>
+            <Text fontWeight="normal" color="gray.500">
+              Optional
+            </Text>
+          </HStack>
+        </FormLabel>
         <Input
           placeholder="https://discord.gg/project"
           width={"full"}
@@ -46,12 +55,16 @@ export default function ProjectSocials({
           onChange={handleDiscordChange}
           maxLength={40}
         />
-      </Flex>
-      <Flex flexDir={"column"} width={"full"}>
-        <Flex justify={"space-between"}>
-          <Text fontSize={"2xl"}>Telegram</Text>
-          <Text> Optional</Text>
-        </Flex>
+      </FormControl>
+      <FormControl>
+        <FormLabel>
+          <HStack justifyContent="space-between">
+            <Text>Telegram</Text>
+            <Text fontWeight="normal" color="gray.500">
+              Optional
+            </Text>
+          </HStack>
+        </FormLabel>
         <Input
           placeholder="https://t.me/project"
           width={"full"}
@@ -59,14 +72,17 @@ export default function ProjectSocials({
           onChange={handleTelegramChange}
           maxLength={40}
         />
-      </Flex>
-      <Flex flexDir={"row"} justify={"space-between"} marginTop={8}>
+      </FormControl>
+
+      <HStack w="full" justify="space-between">
         <Button
           variant="outline"
           colorScheme="black"
           boxShadow="4px 4px 0 black"
           transform="scale(1)"
           marginTop={4}
+          px={8}
+          py={6}
           _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
           isExternal
           isDisabled={loading}
@@ -83,6 +99,8 @@ export default function ProjectSocials({
           leftIcon={loading ? <Spinner /> : null}
           transform="scale(1)"
           marginTop={4}
+          px={8}
+          py={6}
           _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
           isExternal
           isDisabled={!projectInfo?.twitterID || loading}
@@ -94,7 +112,7 @@ export default function ProjectSocials({
         >
           Submit Project
         </Button>
-      </Flex>
-    </Flex>
+      </HStack>
+    </VStack>
   );
 }
