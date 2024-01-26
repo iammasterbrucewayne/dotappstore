@@ -22,7 +22,27 @@ Additionally, it must fulfill the following requirements:
 
 ## Development
 
-First, run the development server:
+First, you will need to set up your local environment with the following variables:
+
+```env
+# Database
+MONGODB_URI = "<your_mongodb_project_data_database_uri>"
+MONGODB_USERS_URI = "<your_mongodb_users_database_uri>"
+
+# Auth
+TWITTER_CLIENT_ID = "<your_twitter_client_id>"
+TWITTER_CLIENT_SECRET = "<your_twitter_client_secret>"
+SENDGRID_BEARER = "<your_sendgrid_bearer_token>"
+SENDER_EMAIL = "<email_id_for_magic_links>"
+JWT_SECRET = "<jwt_secret>"
+AUTH_SECRET = "<random_string_of_at_least_32_characters>"
+
+# Cloudinary
+NEXT_PUBLIC_CLOUD_NAME = "<your_cloudinary_cloud_name>"
+NEXT_PUBLIC_PRESET = "<your_cloudinary_cloud_preset>"
+```
+
+Next, run the development server:
 
 ```bash
 yarn dev

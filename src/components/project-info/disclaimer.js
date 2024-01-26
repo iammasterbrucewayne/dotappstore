@@ -33,7 +33,7 @@ const MoreInfoModal = ({ isOpen, onClose }) => (
 					dotappstore, or any other related entity.
 				</Text>
 				<ModalFooter>
-					<Button onClick={onClose} colorScheme="pink">
+					<Button onClick={onClose} colorScheme="pink" py={6} px={12}>
 						I understand
 					</Button>
 				</ModalFooter>

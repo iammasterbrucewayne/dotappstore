@@ -1,7 +1,11 @@
+import AuthProvider from "@/components/common/auth-provider";
+
 export default function RootLayout({ children }) {
-	return (
-		<html lang="en">
-			<body>{children}</body>
-		</html>
-	);
+  return (
+    <AuthProvider>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </AuthProvider>
+  );
 }
