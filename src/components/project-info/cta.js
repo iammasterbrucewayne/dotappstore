@@ -94,25 +94,25 @@ const CTA = ({
   return (
     <VStack>
       <Button
-        colorScheme="pink"
+        colorScheme={hasUpvoted && isHovering ? "red" : "pink"}
         w="full"
         py={8}
         leftIcon={
           hasUpvoted ? (
             isHovering ? (
-              <IoCloseSharp color="#B83280" />
+              <IoCloseSharp />
             ) : (
-              <IoCheckmarkSharp color="white" />
+              <IoCheckmarkSharp />
             )
           ) : isHovering ? (
-            <IoCaretUp color="#B83280" />
+            <IoCaretUp />
           ) : (
-            <IoCaretUp color="white" />
+            <IoCaretUp />
           )
         }
-        variant={isHovering ? "outline" : "solid"}
-        rightIcon={<Text>{upvotes}</Text>}
-        transform="scale(1)"
+        variant={hasUpvoted && isHovering ? "outline" : "solid"}
+        border="1px solid"
+        rightIcon={hasUpvoted && isHovering ? "" : <Text>{upvotes}</Text>}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         isDisabled={isUpvoteLoading || !session}
@@ -151,8 +151,7 @@ const CTA = ({
         py={8}
         as={Link}
         href={url}
-        // boxShadow="4px 4px 0 #B83280"
-        _hover={{ textDecoration: "none", color: "gray.900" }}
+        _hover={{ textDecoration: "none" }}
         isExternal
       >
         Try it
@@ -169,14 +168,12 @@ const CTA = ({
           <Button
             as={Link}
             href={`/edit/${id}`}
-            colorScheme="pink"
-            variant="outline"
-            w="full"
-            py={4}
+            color="pink.600"
+            fontWeight="normal"
+            bg="none"
+            p={0}
             leftIcon={<IoPencil />}
-            boxShadow="4px 4px 0 #B83280"
-            transform="scale(1)"
-            _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
+            _hover={{ textDecoration: "none", color: "pink.400" }}
           >
             Edit Project
           </Button>
@@ -213,16 +210,16 @@ const CTA = ({
             </Button>
             <Modal isOpen={isOpen} onClose={onClose} isCentered size={"lg"}>
               <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>
-                  <Text fontSize={"2xl"}>Submit a report here</Text>
+              <ModalContent p={4}>
+                <ModalHeader fontWeight="bold">
+                  Submit a report here
                 </ModalHeader>
                 <ModalCloseButton isDisabled={isReportLoading} />
 
                 <ModalBody>
-                  <Text fontSize={"2xl"}>
+                  <Text fontSize={"lg"}>
                     Help us understand the problem - What is going on with this
-                    project
+                    project?
                   </Text>
                   <Flex flexDir={"row"} flexWrap={"wrap"} gap={4} mt={6}>
                     {reportTypes.map((type) => (
@@ -230,13 +227,9 @@ const CTA = ({
                         variant={"outline"}
                         key={type}
                         onClick={() => setReportedType(type)}
-                        color={reportedType == type ? "pink.600" : "gray.400"}
-                        borderColor={
-                          reportedType == type ? "pink.600" : "gray.400"
-                        }
+                        colorScheme={reportedType == type ? "pink" : "gray"}
                         fontWeight="normal"
                         bg="none"
-                        _hover={{ textDecoration: "none", color: "pink.400" }}
                       >
                         {type}
                       </Button>
@@ -247,6 +240,8 @@ const CTA = ({
                 <ModalFooter>
                   <Button
                     colorScheme="pink"
+                    py={6}
+                    px={12}
                     isDisabled={!reportedType || isReportLoading}
                     onClick={async () => {
                       setIsReportLoading(true);

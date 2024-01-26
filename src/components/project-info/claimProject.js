@@ -10,6 +10,8 @@ import {
   useDisclosure,
   Button,
   Icon,
+  Link,
+  Heading,
 } from "@chakra-ui/react";
 import { signIn, signOut } from "next-auth/react";
 import { IoShieldCheckmarkOutline } from "react-icons/io5";
@@ -22,7 +24,7 @@ export default function ClaimProject({ id, appname, session, twitterID }) {
         fontWeight="normal"
         bg="none"
         p={0}
-        leftIcon={<Icon as={IoShieldCheckmarkOutline} />}
+        leftIcon={<IoShieldCheckmarkOutline />}
         _hover={{ textDecoration: "none", color: "pink.400" }}
         onClick={session ? onOpen : signIn}
       >
@@ -31,35 +33,42 @@ export default function ClaimProject({ id, appname, session, twitterID }) {
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader alignSelf={"center"} marginTop={4}>
-            Claim {appname} Project
-          </ModalHeader>
-          <ModalBody fontSize={"lg"} textAlign={"center"}>
-            <Flex flexDir={"column"} gap={6}>
-              <Text>
-                Looks like you&apos;re trying to login as{" "}
+        <ModalContent p={4}>
+          <ModalHeader fontWeight="bold">Claim {appname}</ModalHeader>
+          <ModalBody fontSize={"lg"} mb={4}>
+            <Text mb={4}>
+              You&apos;re logged in as{" "}
+              <b>
                 {session?.user?.username ||
                   session?.user?.email ||
                   `${session?.user?.name.slice(
                     0,
                     4
                   )}...${session?.user?.name.slice(-4)}`}
-              </Text>
-              <Text>
-                You need to login through twitter with the account @{twitterID}{" "}
-                to prove you&apos;re the owner
-              </Text>
-            </Flex>
+              </b>
+            </Text>
+            <Text>
+              To claim this project, you need to login using Twitter with the
+              account{" "}
+              <Link
+                href={`https://x.com/${twitterID}`}
+                fontWeight="bold"
+                isExternal
+              >
+                @{twitterID}
+              </Link>
+            </Text>
           </ModalBody>
 
-          <ModalFooter alignSelf={"center"}>
+          <ModalFooter>
             <Button
-              colorScheme="pink"
+              colorScheme="red"
               onClick={async () => {
                 await signOut();
                 await signIn();
               }}
+              py={6}
+              w="full"
             >
               Sign Out and Login with Twitter
             </Button>
