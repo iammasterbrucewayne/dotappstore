@@ -121,7 +121,7 @@ export default function Page({ projectInfo, setProjectInfo }) {
         Uh oh! Project Not Found...
       </Heading>
       <Text fontSize="xl" mb={8}>
-        We couldn't find the project you're looking for... <br />Think we're missing a
+        We couldn&apos;t find the project you&apos;re looking for... <br />Think we&apos;re missing a
         project? Submit it below.
       </Text>
       {session ? (
