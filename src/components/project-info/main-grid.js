@@ -63,7 +63,7 @@ const MainGrid = ({
               mb={8}
               isLoaded={isLoaded}
             />
-            {screenshots.length > 0 ? (
+            {screenshots?.length > 0 ? (
               <ImageCarousel imageUrls={screenshots} hidden={isHidden} />
             ) : (
               <ImageCarousel hidden={isHidden} />

@@ -61,7 +61,7 @@ const CTA = ({
 
   useEffect(() => {
     if (session) {
-      reportedBy.find((user) => {
+      reportedBy?.find((user) => {
         if (
           user.user == session?.user?.username ||
           user.user == session?.user?.email ||
