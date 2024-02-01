@@ -1,6 +1,14 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { VStack, Text, Heading, Flex, Button, Spinner, Link } from "@chakra-ui/react";
+import {
+  VStack,
+  Text,
+  Heading,
+  Flex,
+  Button,
+  Spinner,
+  Link,
+} from "@chakra-ui/react";
 import { signIn, signOut } from "next-auth/react";
 import ProjectDetails from "./projectDetails";
 import ProjectImages from "./projectImages";
@@ -9,7 +17,11 @@ import ProjectSocials from "./projectSocials";
 import { useRouter } from "next/navigation";
 import { upload } from "@/lib/utils";
 
-export default function Page({ projectInfo, setProjectInfo }) {
+export default function Page({
+  projectInfo,
+  newProjectInfo,
+  setNewProjectInfo,
+}) {
   const { data: session, status } = useSession();
   const [screenshotPreviews, setScreenshotPreviews] = useState(
     projectInfo?.screenshots
@@ -36,22 +48,22 @@ export default function Page({ projectInfo, setProjectInfo }) {
   const pushProject = async () => {
     try {
       const logoUrl =
-        typeof logo != "string" ? await upload(logo) : projectInfo?.logo;
+        typeof logo != "string" ? await upload(logo) : newProjectInfo?.logo;
       const uploadedScreenshots = await Promise.all(
         screenshots.map(async (screenshot) =>
           typeof screenshot != "string" ? await upload(screenshot) : screenshot
         )
       );
 
-      projectInfo.logo = logoUrl;
-      projectInfo.screenshots = uploadedScreenshots;
+      newProjectInfo.logo = logoUrl;
+      newProjectInfo.screenshots = uploadedScreenshots;
 
       const response = await fetch("/api/edit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(projectInfo),
+        body: JSON.stringify(newProjectInfo),
       });
 
       if (!response.ok) {
@@ -59,7 +71,7 @@ export default function Page({ projectInfo, setProjectInfo }) {
       }
 
       const data = await response.json();
-      router.push(`/project/${projectInfo.id}`);
+      router.push(`/project/${newProjectInfo.id}`);
     } catch (error) {
       alert("Failed to edit project");
     }
@@ -70,8 +82,8 @@ export default function Page({ projectInfo, setProjectInfo }) {
       case 0:
         return (
           <ProjectDetails
-            projectInfo={projectInfo}
-            setProjectInfo={setProjectInfo}
+            projectInfo={newProjectInfo}
+            setProjectInfo={setNewProjectInfo}
             setSubmitStage={setSubmitStage}
           />
         );
@@ -92,17 +104,17 @@ export default function Page({ projectInfo, setProjectInfo }) {
       case 2:
         return (
           <ProjectCategory
-            projectInfo={projectInfo}
-            setProjectInfo={setProjectInfo}
+            projectInfo={newProjectInfo}
+            setProjectInfo={setNewProjectInfo}
             setSubmitStage={setSubmitStage}
           />
         );
       case 3:
         return (
           <ProjectSocials
-            projectInfo={projectInfo}
+            projectInfo={newProjectInfo}
             pushProject={pushProject}
-            setProjectInfo={setProjectInfo}
+            setProjectInfo={setNewProjectInfo}
             setSubmitStage={setSubmitStage}
           />
         );
@@ -121,8 +133,8 @@ export default function Page({ projectInfo, setProjectInfo }) {
         Uh oh! Project Not Found...
       </Heading>
       <Text fontSize="xl" mb={8}>
-        We couldn&apos;t find the project you&apos;re looking for... <br />Think we&apos;re missing a
-        project? Submit it below.
+        We couldn&apos;t find the project you&apos;re looking for... <br />
+        Think we&apos;re missing a project? Submit it below.
       </Text>
       {session ? (
         <Button

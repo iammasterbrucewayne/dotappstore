@@ -57,7 +57,7 @@ export default function ProjectImages({
   const handleScreenshotsChange = (e) => {
     const newFiles = Array.from(e.target.files);
 
-    if (screenshots.length + newFiles.length > 5) {
+    if (screenshots?.length + newFiles.length > 5) {
       alert("You can only upload up to 5 screenshots.");
       return;
     }
@@ -301,7 +301,7 @@ export default function ProjectImages({
             py={6}
             _hover={{ textDecoration: "none", transform: "scale(1.03)" }}
             isExternal
-            isDisabled={!logo || screenshots.length < 1}
+            isDisabled={!logo || screenshots?.length < 1}
             onClick={() => {
               setSubmitStage(2);
             }}

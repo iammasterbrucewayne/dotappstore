@@ -106,3 +106,10 @@ export async function downvote({ projectID, userID }) {
     alert("An unexpected error occurred. Please try again.");
   }
 }
+
+export function sanitizeTwitterUsername(username) {
+  if (username.startsWith("@")) {
+    return username.slice(1);
+  }
+  return username;
+}

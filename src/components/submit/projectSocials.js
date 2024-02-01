@@ -1,3 +1,4 @@
+import { sanitizeTwitterUsername } from "@/lib/utils";
 import { Flex, Spinner, Heading, Text, Input, Button, FormControl, FormLabel, HStack, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -104,7 +105,7 @@ export default function ProjectSocials({ setSubmitStage, pushProject }) {
           isDisabled={!twitter || loading}
           onClick={async () => {
             const socials = {
-              twitter: twitter,
+              twitter: sanitizeTwitterUsername(twitter),
               discord: discord,
               telegram: telegram,
             };
