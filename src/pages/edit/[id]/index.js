@@ -13,6 +13,7 @@ export default function Page() {
 
   const { projects, setProjects } = useProjects();
   const [projectInfo, setProjectInfo] = useState(null);
+  const [newProjectInfo, setNewProjectInfo] = useState(projectInfo);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -30,6 +31,7 @@ export default function Page() {
     } else {
       const project = find(projects, { id: projectId });
       setProjectInfo(project);
+      setNewProjectInfo(project);
     }
   }, [projects, projectId, setProjects]);
 
@@ -39,7 +41,8 @@ export default function Page() {
         <Navbar />
         <EditProject
           projectInfo={projectInfo}
-          setProjectInfo={setProjectInfo}
+          newProjectInfo={newProjectInfo}
+          setNewProjectInfo={setNewProjectInfo}
         />
       </ContextWrapper>
     </AuthProvider>
