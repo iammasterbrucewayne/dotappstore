@@ -1,4 +1,16 @@
-import { Flex, Spinner, Heading, Text, Input, Button, VStack, FormControl, FormLabel, HStack } from "@chakra-ui/react";
+import { sanitizeTwitterUsername } from "@/lib/utils";
+import {
+  Flex,
+  Spinner,
+  Heading,
+  Text,
+  Input,
+  Button,
+  VStack,
+  FormControl,
+  FormLabel,
+  HStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function ProjectSocials({
@@ -8,9 +20,15 @@ export default function ProjectSocials({
   setSubmitStage,
 }) {
   const [loading, setLoading] = useState(false);
+  const [twitterInput, setTwitterInput] = useState("");
 
   const handleTwitterChange = (event) => {
-    setProjectInfo({ ...projectInfo, twitterID: event.target.value });
+    const { value } = event.target;
+    setTwitterInput(value);
+    setProjectInfo({
+      ...projectInfo,
+      twitterID: sanitizeTwitterUsername(value),
+    });
   };
 
   const handleDiscordChange = (event) => {
@@ -34,7 +52,7 @@ export default function ProjectSocials({
         <Input
           placeholder="Project Username"
           width={"full"}
-          value={projectInfo?.twitterID}
+          value={twitterInput}
           onChange={handleTwitterChange}
           maxLength={40}
         />
