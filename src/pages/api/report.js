@@ -44,6 +44,45 @@ export default async function handler(req, res) {
         });
       }
 
+      const emailData = JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: process.env.REPORT_EMAIL_PRIMARY }],
+            bcc: [{ email: process.env.REPORT_EMAIL_SECONDARY }],
+            subject: "Reported project",
+          },
+        ],
+        from: { email: process.env.SENDER_EMAIL },
+        content: [
+          {
+            type: "text/plain",
+            value: `User: ${userID}\nProject: ${projectID}\nReason: ${reportType}`,
+          },
+        ],
+      });
+
+      try {
+        const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.SENDGRID_BEARER}`,
+            "Content-Type": "application/json",
+          },
+          body: emailData,
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          console.error("SendGrid error:", error);
+          res
+            .status(error.statusCode)
+            .json({ message: "Failed to send email", details: error });
+        }
+      } catch (error) {
+        console.error("Error sending email:", error);
+        res.status(500).json({ message: "Server error", details: error });
+      }
+
       res.status(200).json({ message: "Report successful" });
     } catch (error) {
       res.status(500).json({ statusCode: 500, message: error.message });
