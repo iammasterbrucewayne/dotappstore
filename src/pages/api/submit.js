@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
+import sanitize from "mongo-sanitize";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
         await client.connect();
         const db = client.db("dotappstoreData");
         const collection = db.collection("projects");
-        const document = req.body;
+        const document = sanitize(req.body);
 
         // Check if a document with the same ID already exists
         const existingDocument = await collection.findOne({ id: document.id });

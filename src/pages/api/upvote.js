@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
+import sanitize from "mongo-sanitize";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
       client = await MongoClient.connect(process.env.MONGODB_URI);
       const dataDB = client.db("dotappstoreData");
       const projectsCollection = dataDB.collection("projects");
-      const { projectID, userID } = req.body;
+      const { projectID, userID } = sanitize(req.body);
       const result = await projectsCollection.updateOne(
         { id: projectID },
         { $inc: { upvotes: 1 }, $addToSet: { upvoteUsers: userID } }

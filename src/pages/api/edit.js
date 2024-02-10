@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
+import sanitize from "mongo-sanitize";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
         await client.connect();
         const db = client.db("dotappstoreData");
         const collection = db.collection("projects");
-        const updatedDocument = req.body;
+        const updatedDocument = sanitize(req.body);
 
         // Delete the _id field from the updated document if it exists
         delete updatedDocument._id;

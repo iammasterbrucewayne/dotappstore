@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
+import sanitize from "mongo-sanitize";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
       client = await MongoClient.connect(process.env.MONGODB_URI);
       const dataDB = client.db("dotappstoreData");
       const projectsCollection = dataDB.collection("projects");
-      const { projectID, userID, reportType } = req.body;
+      const { projectID, userID, reportType } = sanitize(req.body);
 
       // Construct the report object
       const report = { user: userID, type: reportType };
